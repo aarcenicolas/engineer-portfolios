@@ -563,7 +563,7 @@ const CONTENT = {
         logo:"assets/logos/lmu.png", monogram:"TF", invert:false,
         desc:"Microdroplet lifetime research for PCB and vapor-chamber cooling. Machined a thermocouple-embedded copper test surface and processed LabVIEW/DAQ data in MATLAB to characterize residence time and heat transfer."},
       {when:"Jun 2020 — Jul 2021", role:"Sales Associate", org:"Vacamsa S.A. de C.V. · Mexico City",
-        logo:"assets/logos/vacamsa.png", monogram:"VC", invert:true,
+        logo:"assets/logos/vacamsa.jpg", monogram:"VC", invert:true,
         desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."}
 
       /* ── WALLTOPIA — needs your input before it goes live ────────────────
@@ -574,7 +574,7 @@ const CONTENT = {
          you touched technical drawings or purely commercial. Then uncomment:
 
       ,{when:"[dates]", role:"[title]", org:"Walltopia · [location]",
-        logo:"assets/logos/walltopia.png", monogram:"WT", invert:true,
+        logo:"assets/logos/walltopia.jpg", monogram:"WT", invert:true,
         desc:"Supported sales and technical specification of climbing wall systems, translating client concepts into buildable configurations compliant with EN 12572 for artificial climbing structures."}
       ──────────────────────────────────────────────────────────────────── */
     ]
@@ -587,7 +587,7 @@ const CONTENT = {
   // to that project's object (see full field list on the first entry below).
   // Leave it out (or set src to null) to keep the default line-art icon.
   projects: [
-    { id:"rocket2stage", category:"eng", icon:"rocket", media:{type:"image", src:null},
+    { id:"rocket2stage", category:"eng", icon:"rocket", media:{type:"image", src:"assets/images/rocket-pic.jpg"},
       title:"Two-Stage Solid Rocket System",
       shortDesc:"Booster–sustainer staging, avionics, and dual-deployment recovery for high-power flight.",
       tagline:"High-Power Rocketry · Avionics",
@@ -596,7 +596,7 @@ const CONTENT = {
       bullets:["Booster–sustainer staging with independent ignition sequencing","CP–CG stability analysis and trajectory simulation for safe staging","Flight computer for telemetry logging and staging logic","Fabricated airframe and internal structures; conducted igniter and separation ground tests"],
       tags:["Propulsion","Avionics","Structures"] },
 
-    { id:"igvc", category:"eng", icon:"rover",
+    { id:"igvc", category:"eng", icon:"rover", media:{type:"image", src:"assets/images/ugv-actual.png"},
       title:"IGVC Autonomous Ground Vehicle",
       shortDesc:"Perception, mapping, and real-time control on a custom autonomous platform.",
       tagline:"ROS2 · SLAM · Mechatronics",
@@ -605,7 +605,7 @@ const CONTENT = {
       bullets:["Modular, weatherproof T-slotted aluminum chassis with payload capacity","LiDAR, GNSS, IMU, and depth camera for SLAM-based navigation","Jetson–Arduino motor-control interface to mitigate ROS control latency","Real-world testing: lane following, obstacle navigation, emergency stop"],
       tags:["ROS2","SLAM","Jetson"] },
 
-    { id:"drone", category:"eng", icon:"drone",
+    { id:"drone", category:"eng", icon:"drone", media:{type:"image", src:"assets/images/drone-competition.png"},
       title:"Autonomous Basketball Drone",
       shortDesc:"Flight controls and release optimization using ballistic prediction and PID.",
       tagline:"Flight Controls · System Modeling",
@@ -614,7 +614,7 @@ const CONTENT = {
       bullets:["Kinematic release logic with ±0.02 m alignment tolerance","Tuned natural frequencies (x: 1 rad/s, y: 1.5 rad/s) to reduce oscillation","Diagnosed compensator-induced instability from cross-axis coupling","Improved shot consistency with a +0.25 m elevation bias"],
       tags:["PID","MATLAB","Controls"] },
 
-    { id:"convection", category:"eng", icon:"table",
+    { id:"convection", category:"eng", icon:"table", media:{type:"image", src:"assets/images/rotation-table-cad.png"},
       title:"Rotary Convection Table",
       shortDesc:"CAD/FEA rig simulating planetary thermal convection for icy-moon research.",
       tagline:"Planetary Convection · CAD / FEA",
@@ -623,7 +623,7 @@ const CONTENT = {
       bullets:["SolidWorks CAD models and FEA verifying structural integrity under rotation/thermal load","Addressed heat distribution and rotational stability challenges","Contributed to a proposal submitted to NASA JPL on ice-creep behavior"],
       tags:["SolidWorks","FEA","Thermal"] },
 
-    { id:"finsfea", category:"eng", icon:"fin",
+    { id:"finsfea", category:"eng", icon:"fin", media:{type:"image", src:"assets/images/fea-stress-fins.png"},
       title:"FEA — Rocket Fins, Mach 3",
       shortDesc:"Structural study of carbon-fiber fins under Mach-3 aerodynamic loading.",
       tagline:"Abaqus Simulation · Carbon Fiber",
@@ -632,7 +632,7 @@ const CONTENT = {
       bullets:["Modeled aerodynamic loading at 92.6 psi (1389 N/m)","Identified 99 MPa peak Von Mises stress at the fin root (FEA)","Predicted 2 mm tip deflection analytically; FEA returned ~45 nm","Applied composite material properties (E = 230–250 GPa) with refined meshing"],
       tags:["Abaqus","Composites","FEA"] },
 
-    { id:"robot", category:"eng", icon:"robot",
+    { id:"robot", category:"eng", icon:"robot", media:{type:"image", src:"assets/images/self-balancing-robot-front.jpg"},
       title:"Self-Balancing Robot",
       shortDesc:"Inverted-pendulum robot with IMU-driven PID stabilization.",
       tagline:"PID Control · IMU Fusion · Embedded",
@@ -668,7 +668,7 @@ const CONTENT = {
       bullets:["On-site inspection and failure-mode analysis against applicable standards","Correlated physical evidence with operating history and design specifications","Structured each report around observed condition, root cause, and prioritized corrective action","Delivered technical findings in terms non-technical stakeholders could act on"],
       tags:["Failure Analysis","Documentation"] },
 
-    { id:"kitesurf", category:"eng", icon:"gear",
+    { id:"kitesurf", category:"eng", icon:"gear", media:{type:"image", src:"assets/images/kitesurf-camera-in-use.png"},
       title:"360° Kitesurfing Camera Gear",
       shortDesc:"Wearable, extendable camera arm for stabilized action-sports footage.",
       tagline:"Product Design · CAD · Prototyping",
@@ -677,7 +677,7 @@ const CONTENT = {
       bullets:["Tolerance-controlled CAD assemblies with interlocking mechanisms","Fabricated a lightweight composite prototype","Improved stability via balanced geometry","User-tested under simulated kitesurfing motion"],
       tags:["CAD","Prototyping"] },
 
-    { id:"materials", category:"eng", icon:"material",
+    { id:"materials", category:"eng", icon:"material", media:{type:"image", src:"assets/images/materials-lab.png"},
       title:"Materials Research — AlSi10Mg Overaging",
       shortDesc:"Long-term mechanical-property degradation study with LMU and Boeing.",
       tagline:"Additive Manufacturing · Boeing",
@@ -686,7 +686,7 @@ const CONTENT = {
       bullets:["Overaging studied at 130–190°C for 2–1000 hours, XY and Z orientations","Metallography identifying Si-precipitate coarsening","Tensile and hardness testing linking microstructure to performance","Data used by Boeing to refine post-processing heat-treatment standards"],
       tags:["SEM","Metallurgy","Boeing"] },
 
-    { id:"ruhrpumpen", category:"data", icon:"chart",
+    { id:"ruhrpumpen", category:"data", icon:"chart", media:{type:"image", src:"assets/images/ruhrpumpen-photo.jpg"},
       title:"Process & KPI Analytics — Ruhrpumpen",
       shortDesc:"Process mapping and KPI/defect analysis for industrial pump manufacturing.",
       tagline:"Process Optimization · Lean Six Sigma",
@@ -707,18 +707,22 @@ const CONTENT = {
 
   // add fileUrl:"assets/certs/yourfile.pdf" to any entry to show a "View Certificate" link
   certifications: [
-    {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program", note:"Awarded Jul 02, 2025", fileUrl:null},
+    {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program", note:"Awarded Jul 02, 2025", fileUrl:"assets/certs/nasa-arset.pdf"},
     {date:"2024", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement", note:"Certified", fileUrl:null},
     {date:"2023", title:"Google Data Analytics Certificate", issuer:"Google Career Certificates", note:"Certified", fileUrl:null},
     // year unconfirmed — set the correct date once you have it
-    {date:"—",    title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia", note:"Certified", fileUrl:null},
-    {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate", note:"Issued Jul 31, 2020", fileUrl:null}
+    {date:"—",    title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia", note:"Certified", fileUrl:"assets/certs/climbing-walls-standards-en12572.pdf"},
+    {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate", note:"Issued Jul 31, 2020", fileUrl:"assets/certs/harvardx-prescription-drugs.pdf"},
+    // TODO: confirm exact issue dates/issuer names for these three — placeholders below
+    {date:"—",    title:"Claude 101", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/claude-101.pdf"},
+    {date:"—",    title:"AI Fluency Framework", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/ai-fluency-framework.pdf"},
+    {date:"—",    title:"AI Fluency for Nonprofits", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/ai-fluency-nonprofits.pdf"}
   ],
 
   // add media:{type:"image", src:"assets/images/climbing.jpg"} (or type:"video") to any entry for a real photo/video
   hobbies: [
-    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:null,
-      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk. (Photos coming soon.)"},
+    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:{type:"image", src:"assets/images/kitesurf-hobby.png"},
+      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk."},
     {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>', media:null,
       title:"Photography", desc:"Documenting builds, launches, and trips — often from a wearable rig of my own design. (Photos coming soon.)"}
   ],
