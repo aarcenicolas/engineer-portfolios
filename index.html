@@ -35,6 +35,11 @@
   .media-fill{
     position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;
   }
+  /* used in the project modal — shows the whole photo instead of cropping it to fill the frame */
+  .media-contain{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+    background:var(--bg-2);
+  }
   .wrap{max-width:var(--maxw);margin:0 auto;padding:0 40px;}
   ::selection{background:var(--ink);color:var(--bg);}
   :focus-visible{outline:2px solid var(--ink);outline-offset:3px;}
@@ -139,17 +144,24 @@
     transition:border-color .2s ease, background .2s ease, transform .2s ease;
   }
   .bubble img{
-    width:100%;height:100%;object-fit:contain;padding:10px;
-    position:relative;z-index:2;background:var(--bg-2);
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    max-width:calc(100% - 20px);max-height:calc(100% - 20px);
+    width:auto;height:auto;z-index:2;display:block;
   }
   /* logos supplied as dark-on-transparent PNG/SVG get lifted to read on dark bg */
   .bubble img.invert{filter:invert(1) grayscale(1) brightness(1.9);}
+  /* logos that are flat/opaque photos (no transparency, baked-in light background)
+     sit on a light chip instead of the dark bubble bg so they read as intentional,
+     not like a mismatched square floating in a circle */
+  .bubble.on-light{background:#F2F1EC;}
+  .timeline-item:hover .bubble.on-light,.edu-item:hover .bubble.on-light{background:#FFFFFF;}
   .bubble .monogram{
     font-family:'Space Grotesk', sans-serif;font-size:15px;font-weight:600;
     letter-spacing:0.02em;color:var(--muted);z-index:1;user-select:none;
   }
   .bubble-lg{width:64px;height:64px;}
   .bubble-lg .monogram{font-size:18px;}
+  .bubble-lg img{max-width:calc(100% - 22px);max-height:calc(100% - 22px);}
   .timeline-item:hover .bubble,.edu-item:hover .bubble{
     border-color:var(--muted-2);background:var(--bg-3);transform:translateY(-1px);
   }
@@ -214,6 +226,12 @@
   .proj-visual svg{width:34%;height:34%;opacity:0.85;transition:opacity .2s ease, transform .3s ease;}
   .proj-card:hover .proj-visual svg{opacity:1;transform:scale(1.06);}
   .proj-idx{position:absolute;top:14px;left:14px;font-family:'IBM Plex Mono';font-size:10.5px;color:var(--muted);}
+  .media-count{
+    position:absolute;top:14px;right:14px;z-index:3;
+    font-family:'IBM Plex Mono';font-size:10px;color:var(--ink);letter-spacing:0.04em;
+    background:rgba(10,10,10,0.6);border:1px solid rgba(255,255,255,0.18);
+    padding:4px 9px;border-radius:20px;backdrop-filter:blur(2px);
+  }
   .proj-body{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
   .proj-cat{font-family:'IBM Plex Mono';font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;}
   .proj-body h3{font-size:16.5px;margin-bottom:8px;transition:letter-spacing .15s ease;}
@@ -245,10 +263,28 @@
   }
   .modal-close:hover{border-color:var(--ink);}
   .modal-visual{
-    aspect-ratio:21/9;background:var(--bg-2);display:flex;align-items:center;justify-content:center;
+    aspect-ratio:16/10;background:var(--bg-2);display:flex;align-items:center;justify-content:center;
     border-bottom:1px solid var(--line);position:relative;overflow:hidden;
   }
   .modal-visual svg{width:16%;opacity:0.9;}
+  .gallery-nav{
+    position:absolute;top:50%;transform:translateY(-50%);z-index:4;
+    width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.25);
+    background:rgba(10,10,10,0.55);color:var(--ink);font-size:18px;line-height:1;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    backdrop-filter:blur(2px);transition:background .15s ease, border-color .15s ease;
+  }
+  .gallery-nav:hover{background:rgba(10,10,10,0.85);border-color:var(--ink);}
+  .gallery-nav.prev{left:16px;} .gallery-nav.next{right:16px;}
+  .gallery-dots{
+    position:absolute;bottom:14px;left:50%;transform:translateX(-50%);z-index:4;
+    display:flex;gap:7px;
+  }
+  .gallery-dots .dot{
+    width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.35);
+    cursor:pointer;transition:background .15s ease, transform .15s ease;
+  }
+  .gallery-dots .dot.active{background:var(--ink);transform:scale(1.2);}
   .modal-body{padding:44px 48px 48px;}
   .modal-cat{font-family:'IBM Plex Mono';font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;}
   .modal-body h2{font-size:clamp(24px,3vw,32px);text-transform:uppercase;letter-spacing:-0.01em;margin-bottom:18px;}
@@ -543,7 +579,7 @@ const CONTENT = {
         degree: "U.S. Diploma · Mexican SEP · AP International Diploma",
         school: "The American School Foundation · Mexico City",
         detail: "K–12 · Class of 2020",
-        logo: "assets/logos/asf.png", monogram:"ASF", invert:true
+        logo: "assets/logos/asf.png", monogram:"ASF", invert:false
       }
     ],
     resumeUrl: "resume.pdf",
@@ -551,10 +587,10 @@ const CONTENT = {
     photoUrl: null,
     timeline: [
       {when:"Nov 2022 — May 2025", role:"Student Research Assistant, Materials Lab", org:"LMU · Boeing-sponsored research",
-        logo:"assets/logos/boeing.png", monogram:"BA", invert:true,
+        logo:"assets/logos/boeing.png", monogram:"BA", invert:false,
         desc:"Hardness and tensile testing on 30+ AlSi10Mg additively manufactured samples, cross-referenced with optical/SEM microstructure analysis to inform post-processing heat-treatment standards. Presented to 20+ engineers and faculty at ASME meetings; contributing to a manuscript under peer review."},
       {when:"May 2024 — Oct 2024", role:"Project Engineer Intern", org:"Ruhrpumpen · Monterrey, Mexico",
-        logo:"assets/logos/ruhrpumpen.png", monogram:"RP", invert:true,
+        logo:"assets/logos/ruhrpumpen.png", monogram:"RP", invert:false,
         desc:"Process mapping, time studies, and KPI/defect analysis for API-class pump programs — Lean Six Sigma improvements cut cycle times by up to 15%. Managed purchase orders, inspection plans, and supplier documentation against API, ASME, and ISO standards."},
       {when:"Aug 2023 — Dec 2023", role:"Mechanical Engineer", org:"LMU Fluids of Astrophysical Bodies Lab",
         logo:"assets/logos/lmu.png", monogram:"FAB", invert:false,
@@ -563,7 +599,7 @@ const CONTENT = {
         logo:"assets/logos/lmu.png", monogram:"TF", invert:false,
         desc:"Microdroplet lifetime research for PCB and vapor-chamber cooling. Machined a thermocouple-embedded copper test surface and processed LabVIEW/DAQ data in MATLAB to characterize residence time and heat transfer."},
       {when:"Jun 2020 — Jul 2021", role:"Sales Associate", org:"Vacamsa S.A. de C.V. · Mexico City",
-        logo:"assets/logos/vacamsa.jpg", monogram:"VC", invert:true,
+        logo:"assets/logos/vacamsa.jpg", monogram:"VC", invert:false, onLight:true,
         desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."}
 
       /* ── WALLTOPIA — needs your input before it goes live ────────────────
@@ -574,20 +610,27 @@ const CONTENT = {
          you touched technical drawings or purely commercial. Then uncomment:
 
       ,{when:"[dates]", role:"[title]", org:"Walltopia · [location]",
-        logo:"assets/logos/walltopia.jpg", monogram:"WT", invert:true,
+        logo:"assets/logos/walltopia.jpg", monogram:"WT", invert:false, onLight:true,
         desc:"Supported sales and technical specification of climbing wall systems, translating client concepts into buildable configurations compliant with EN 12572 for artificial climbing structures."}
       ──────────────────────────────────────────────────────────────────── */
     ]
   },
 
   // ---- PROJECTS: add, remove, or reorder entries freely. Grid re-flows automatically. ----
-  // To add a real photo/video to any project, add e.g.:
-  //   media: { type:"image", src:"assets/images/rocket-launch.jpg" }
-  //   media: { type:"video", src:"assets/videos/rocket-launch.mp4" }
-  // to that project's object (see full field list on the first entry below).
-  // Leave it out (or set src to null) to keep the default line-art icon.
+  // To add real photos/videos to any project, set `media` to an ARRAY of entries — the
+  // card shows the first one, and the modal becomes a swipeable gallery of all of them:
+  //   media: [
+  //     { type:"image", src:"assets/images/rocket-launch.jpg" },
+  //     { type:"video", src:"assets/videos/rocket-launch.mp4" }
+  //   ]
+  // Leave it as an empty array [] to keep the default line-art icon.
   projects: [
-    { id:"rocket2stage", category:"eng", icon:"rocket", media:{type:"image", src:"assets/images/rocket-pic.jpg"},
+    { id:"rocket2stage", category:"eng", icon:"rocket", media:[
+        {type:"image", src:"assets/images/rocket-pic.jpg"},
+        {type:"image", src:"assets/images/avionics-bay.png"},
+        {type:"image", src:"assets/images/rocket-blueprint.png"},
+        {type:"image", src:"assets/images/rocket-blueprint-alt.png"}
+      ],
       title:"Two-Stage Solid Rocket System",
       shortDesc:"Booster–sustainer staging, avionics, and dual-deployment recovery for high-power flight.",
       tagline:"High-Power Rocketry · Avionics",
@@ -596,7 +639,11 @@ const CONTENT = {
       bullets:["Booster–sustainer staging with independent ignition sequencing","CP–CG stability analysis and trajectory simulation for safe staging","Flight computer for telemetry logging and staging logic","Fabricated airframe and internal structures; conducted igniter and separation ground tests"],
       tags:["Propulsion","Avionics","Structures"] },
 
-    { id:"igvc", category:"eng", icon:"rover", media:{type:"image", src:"assets/images/ugv-actual.png"},
+    { id:"igvc", category:"eng", icon:"rover", media:[
+        {type:"image", src:"assets/images/ugv-actual.png"},
+        {type:"image", src:"assets/images/ugv-cad.png"},
+        {type:"image", src:"assets/images/ugv-vision-mapping.png"}
+      ],
       title:"IGVC Autonomous Ground Vehicle",
       shortDesc:"Perception, mapping, and real-time control on a custom autonomous platform.",
       tagline:"ROS2 · SLAM · Mechatronics",
@@ -605,7 +652,11 @@ const CONTENT = {
       bullets:["Modular, weatherproof T-slotted aluminum chassis with payload capacity","LiDAR, GNSS, IMU, and depth camera for SLAM-based navigation","Jetson–Arduino motor-control interface to mitigate ROS control latency","Real-world testing: lane following, obstacle navigation, emergency stop"],
       tags:["ROS2","SLAM","Jetson"] },
 
-    { id:"drone", category:"eng", icon:"drone", media:{type:"image", src:"assets/images/drone-competition.png"},
+    { id:"drone", category:"eng", icon:"drone", media:[
+        {type:"image", src:"assets/images/drone-competition.png"},
+        {type:"image", src:"assets/images/drone-pid-response.png"},
+        {type:"image", src:"assets/images/drone-path-vs-commands.jpg"}
+      ],
       title:"Autonomous Basketball Drone",
       shortDesc:"Flight controls and release optimization using ballistic prediction and PID.",
       tagline:"Flight Controls · System Modeling",
@@ -614,7 +665,9 @@ const CONTENT = {
       bullets:["Kinematic release logic with ±0.02 m alignment tolerance","Tuned natural frequencies (x: 1 rad/s, y: 1.5 rad/s) to reduce oscillation","Diagnosed compensator-induced instability from cross-axis coupling","Improved shot consistency with a +0.25 m elevation bias"],
       tags:["PID","MATLAB","Controls"] },
 
-    { id:"convection", category:"eng", icon:"table", media:{type:"image", src:"assets/images/rotation-table-cad.png"},
+    { id:"convection", category:"eng", icon:"table", media:[
+        {type:"image", src:"assets/images/rotation-table-cad.png"}
+      ],
       title:"Rotary Convection Table",
       shortDesc:"CAD/FEA rig simulating planetary thermal convection for icy-moon research.",
       tagline:"Planetary Convection · CAD / FEA",
@@ -623,7 +676,11 @@ const CONTENT = {
       bullets:["SolidWorks CAD models and FEA verifying structural integrity under rotation/thermal load","Addressed heat distribution and rotational stability challenges","Contributed to a proposal submitted to NASA JPL on ice-creep behavior"],
       tags:["SolidWorks","FEA","Thermal"] },
 
-    { id:"finsfea", category:"eng", icon:"fin", media:{type:"image", src:"assets/images/fea-stress-fins.png"},
+    { id:"finsfea", category:"eng", icon:"fin", media:[
+        {type:"image", src:"assets/images/fea-stress-fins.png"},
+        {type:"image", src:"assets/images/fea-fin-cells.png"},
+        {type:"image", src:"assets/images/fea-full-rocket.png"}
+      ],
       title:"FEA — Rocket Fins, Mach 3",
       shortDesc:"Structural study of carbon-fiber fins under Mach-3 aerodynamic loading.",
       tagline:"Abaqus Simulation · Carbon Fiber",
@@ -632,7 +689,11 @@ const CONTENT = {
       bullets:["Modeled aerodynamic loading at 92.6 psi (1389 N/m)","Identified 99 MPa peak Von Mises stress at the fin root (FEA)","Predicted 2 mm tip deflection analytically; FEA returned ~45 nm","Applied composite material properties (E = 230–250 GPa) with refined meshing"],
       tags:["Abaqus","Composites","FEA"] },
 
-    { id:"robot", category:"eng", icon:"robot", media:{type:"image", src:"assets/images/self-balancing-robot-front.jpg"},
+    { id:"robot", category:"eng", icon:"robot", media:[
+        {type:"image", src:"assets/images/self-balancing-robot-front.jpg"},
+        {type:"image", src:"assets/images/self-balancing-robot-action.jpg"},
+        {type:"image", src:"assets/images/balancing-robot-math.png"}
+      ],
       title:"Self-Balancing Robot",
       shortDesc:"Inverted-pendulum robot with IMU-driven PID stabilization.",
       tagline:"PID Control · IMU Fusion · Embedded",
@@ -668,7 +729,10 @@ const CONTENT = {
       bullets:["On-site inspection and failure-mode analysis against applicable standards","Correlated physical evidence with operating history and design specifications","Structured each report around observed condition, root cause, and prioritized corrective action","Delivered technical findings in terms non-technical stakeholders could act on"],
       tags:["Failure Analysis","Documentation"] },
 
-    { id:"kitesurf", category:"eng", icon:"gear", media:{type:"image", src:"assets/images/kitesurf-camera-in-use.png"},
+    { id:"kitesurf", category:"eng", icon:"gear", media:[
+        {type:"image", src:"assets/images/kitesurf-camera-in-use.png"},
+        {type:"image", src:"assets/images/kitesurf-camera-exploded.png"}
+      ],
       title:"360° Kitesurfing Camera Gear",
       shortDesc:"Wearable, extendable camera arm for stabilized action-sports footage.",
       tagline:"Product Design · CAD · Prototyping",
@@ -677,7 +741,9 @@ const CONTENT = {
       bullets:["Tolerance-controlled CAD assemblies with interlocking mechanisms","Fabricated a lightweight composite prototype","Improved stability via balanced geometry","User-tested under simulated kitesurfing motion"],
       tags:["CAD","Prototyping"] },
 
-    { id:"materials", category:"eng", icon:"material", media:{type:"image", src:"assets/images/materials-lab.png"},
+    { id:"materials", category:"eng", icon:"material", media:[
+        {type:"image", src:"assets/images/materials-lab.png"}
+      ],
       title:"Materials Research — AlSi10Mg Overaging",
       shortDesc:"Long-term mechanical-property degradation study with LMU and Boeing.",
       tagline:"Additive Manufacturing · Boeing",
@@ -686,7 +752,9 @@ const CONTENT = {
       bullets:["Overaging studied at 130–190°C for 2–1000 hours, XY and Z orientations","Metallography identifying Si-precipitate coarsening","Tensile and hardness testing linking microstructure to performance","Data used by Boeing to refine post-processing heat-treatment standards"],
       tags:["SEM","Metallurgy","Boeing"] },
 
-    { id:"ruhrpumpen", category:"data", icon:"chart", media:{type:"image", src:"assets/images/ruhrpumpen-photo.jpg"},
+    { id:"ruhrpumpen", category:"data", icon:"chart", media:[
+        {type:"image", src:"assets/images/ruhrpumpen-photo.jpg"}
+      ],
       title:"Process & KPI Analytics — Ruhrpumpen",
       shortDesc:"Process mapping and KPI/defect analysis for industrial pump manufacturing.",
       tagline:"Process Optimization · Lean Six Sigma",
@@ -721,8 +789,8 @@ const CONTENT = {
 
   // add media:{type:"image", src:"assets/images/climbing.jpg"} (or type:"video") to any entry for a real photo/video
   hobbies: [
-    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:{type:"image", src:"assets/images/kitesurf-hobby.png"},
-      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk."},
+    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:null,
+      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk. (Photos coming soon.)"},
     {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>', media:null,
       title:"Photography", desc:"Documenting builds, launches, and trips — often from a wearable rig of my own design. (Photos coming soon.)"}
   ],
@@ -763,7 +831,7 @@ CONTENT.hero.stats.forEach(s => {
 function bubble(entry, size){
   const mono = entry.monogram || (entry.org || entry.school || '?')
     .replace(/[^A-Za-z ]/g,'').trim().split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
-  const cls = 'bubble' + (size === 'lg' ? ' bubble-lg' : '');
+  const cls = 'bubble' + (size === 'lg' ? ' bubble-lg' : '') + (entry.onLight ? ' on-light' : '');
   const img = entry.logo
     ? `<img src="${entry.logo}" alt="${entry.org || entry.school || ''} logo"
             class="${entry.invert ? 'invert' : ''}" loading="lazy"
@@ -812,13 +880,44 @@ CONTENT.about.timeline.forEach(t => {
     </div>`);
 });
 
-// returns <img>/<video> markup for a project/hobby's `media` field, or the fallback icon svg
-function mediaOrIcon(media, iconSvg){
-  if(!media || !media.src) return iconSvg || '';
-  if(media.type === 'video'){
-    return `<video class="media-fill" src="${media.src}" autoplay muted loop playsinline></video>`;
+// card thumbnail: shows the first media item, plus a count badge if there's more than one
+function cardVisual(p, iconSvg){
+  const list = p.media || [];
+  if(!list.length) return iconSvg || '';
+  const m = list[0];
+  const el = m.type === 'video'
+    ? `<video class="media-fill" src="${m.src}" muted loop playsinline></video>`
+    : `<img class="media-fill" src="${m.src}" alt="">`;
+  const badge = list.length > 1 ? `<span class="media-count mono">${list.length} photos</span>` : '';
+  return el + badge;
+}
+
+/* ---- modal gallery ---- */
+let modalMedia = [];
+let modalIndex = 0;
+let modalIconFallback = '';
+function renderModalMedia(){
+  const container = document.getElementById('modalVisual');
+  if(!modalMedia.length){
+    container.innerHTML = modalIconFallback;
+    return;
   }
-  return `<img class="media-fill" src="${media.src}" alt="">`;
+  const m = modalMedia[modalIndex];
+  const el = m.type === 'video'
+    ? `<video class="media-contain" src="${m.src}" autoplay muted loop playsinline controls></video>`
+    : `<img class="media-contain" src="${m.src}" alt="">`;
+  let nav = '';
+  if(modalMedia.length > 1){
+    nav += `<button class="gallery-nav prev" id="galPrev" aria-label="Previous photo">‹</button>`;
+    nav += `<button class="gallery-nav next" id="galNext" aria-label="Next photo">›</button>`;
+    nav += `<div class="gallery-dots">${modalMedia.map((_,i) => `<span class="dot${i===modalIndex?' active':''}" data-i="${i}"></span>`).join('')}</div>`;
+  }
+  container.innerHTML = el + nav;
+  if(modalMedia.length > 1){
+    document.getElementById('galPrev').addEventListener('click', () => { modalIndex = (modalIndex - 1 + modalMedia.length) % modalMedia.length; renderModalMedia(); });
+    document.getElementById('galNext').addEventListener('click', () => { modalIndex = (modalIndex + 1) % modalMedia.length; renderModalMedia(); });
+    container.querySelectorAll('.dot').forEach(d => d.addEventListener('click', () => { modalIndex = +d.dataset.i; renderModalMedia(); }));
+  }
 }
 
 const projGrid = document.getElementById('projGrid');
@@ -828,7 +927,7 @@ CONTENT.projects.forEach((p, i) => {
   card.dataset.cat = p.category;
   card.dataset.id = p.id;
   card.innerHTML = `
-    <div class="proj-visual">${mediaOrIcon(p.media, `<span class="proj-idx mono">${String(i+1).padStart(2,'0')}</span>${ICONS[p.icon] || ''}`)}</div>
+    <div class="proj-visual">${cardVisual(p, `<span class="proj-idx mono">${String(i+1).padStart(2,'0')}</span>${ICONS[p.icon] || ''}`)}</div>
     <div class="proj-body">
       <div class="proj-cat">${p.tagline}</div>
       <h3>${p.title}</h3>
@@ -858,9 +957,14 @@ CONTENT.certifications.forEach(c => {
 const hobbyGrid = document.getElementById('hobbyGrid');
 CONTENT.hobbies.forEach(h => {
   const hasMedia = h.media && h.media.src;
+  const hobbyMediaHtml = hasMedia
+    ? (h.media.type === 'video'
+        ? `<video class="media-fill" src="${h.media.src}" autoplay muted loop playsinline></video>`
+        : `<img class="media-fill" src="${h.media.src}" alt="">`)
+    : '';
   hobbyGrid.insertAdjacentHTML('beforeend', `
     <div class="hobby-card${hasMedia ? ' has-media' : ''}">
-      ${hasMedia ? mediaOrIcon(h.media) : `<span class="hobby-icon">${h.icon}</span>`}
+      ${hasMedia ? hobbyMediaHtml : `<span class="hobby-icon">${h.icon}</span>`}
       <h3>${h.title}</h3><p>${h.desc}</p>
     </div>`);
 });
@@ -873,7 +977,10 @@ footerLinks.innerHTML = `
 /* ---- modal logic ---- */
 const modalOverlay = document.getElementById('modalOverlay');
 function openModal(p){
-  document.getElementById('modalVisual').innerHTML = mediaOrIcon(p.media, ICONS[p.icon] || '');
+  modalMedia = p.media || [];
+  modalIndex = 0;
+  modalIconFallback = ICONS[p.icon] || '';
+  renderModalMedia();
   document.getElementById('modalCat').textContent = p.tagline;
   document.getElementById('modalTitle').textContent = p.title;
   document.getElementById('modalDesc').textContent = p.fullDesc;
@@ -889,7 +996,12 @@ function closeModal(){
 }
 document.getElementById('modalClose').addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
-document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') closeModal();
+  if(!modalOverlay.classList.contains('open') || modalMedia.length < 2) return;
+  if(e.key === 'ArrowRight'){ modalIndex = (modalIndex + 1) % modalMedia.length; renderModalMedia(); }
+  if(e.key === 'ArrowLeft'){ modalIndex = (modalIndex - 1 + modalMedia.length) % modalMedia.length; renderModalMedia(); }
+});
 
 /* ---- header scroll state ---- */
 const header = document.getElementById('siteHeader');
