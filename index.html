@@ -103,9 +103,21 @@
     text-transform:uppercase;letter-spacing:-0.02em;max-width:900px;
   }
   .hero .role{font-size:19px;color:var(--muted);max-width:560px;margin-bottom:40px;font-family:'Inter';}
-  .stat-row{display:flex;gap:56px;flex-wrap:wrap;margin-bottom:48px;}
-  .stat-row .stat b{display:block;font-family:'Space Grotesk';font-size:30px;color:var(--ink);font-weight:600;}
-  .stat-row .stat span{font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+  /* hero contact block (replaces the old stat row) */
+  .contact-row{display:flex;gap:52px;flex-wrap:wrap;margin-bottom:48px;}
+  .contact-row .ci span{
+    font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);
+    text-transform:uppercase;letter-spacing:0.08em;display:block;margin-bottom:7px;
+  }
+  .contact-row .ci a{
+    font-family:'Space Grotesk';font-size:19px;font-weight:500;color:var(--ink);
+    display:inline-flex;align-items:center;gap:7px;
+    border-bottom:1px solid rgba(255,255,255,0.18);padding-bottom:2px;
+    transition:border-color .18s ease, color .18s ease;
+  }
+  .contact-row .ci a:hover{border-color:var(--ink);}
+  .contact-row .ci a svg{width:15px;height:15px;opacity:.65;flex:0 0 auto;}
+  .contact-row .ci a:hover svg{opacity:1;}
   .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
   .btn{
     font-family:'IBM Plex Mono', monospace;font-size:12px;text-transform:uppercase;
@@ -129,6 +141,8 @@
   .about-photo .corner.bl{bottom:12px;left:12px;border-right:none;border-top:none;}
   .about-photo .corner.br{bottom:12px;right:12px;border-left:none;border-top:none;}
   .about-photo p{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted);text-align:center;padding:24px;}
+  /* the experience column is long — keep the intro + education in view beside it */
+  .about-copy{position:sticky;top:104px;}
   .about-copy p{margin:0 0 20px;color:var(--ink);max-width:560px;}
   .about-copy .lede{font-size:22px;font-family:'Space Grotesk';font-weight:500;line-height:1.35;}
   .about-copy p:not(.lede){color:var(--muted);}
@@ -137,38 +151,54 @@
      Circular logo tile used by Education + Experience entries.
      Falls back to a monogram automatically when no logo file is present. */
   .bubble{
-    flex:0 0 auto;width:54px;height:54px;border-radius:50%;
+    flex:0 0 auto;width:60px;height:60px;border-radius:50%;
     background:var(--bg-2);border:1px solid var(--line);
     display:flex;align-items:center;justify-content:center;
     position:relative;overflow:hidden;
-    transition:border-color .2s ease, background .2s ease, transform .2s ease;
+    transition:border-color .25s ease, background .25s ease,
+               transform .25s ease, box-shadow .25s ease;
   }
   .bubble img{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    max-width:calc(100% - 6px);max-height:calc(100% - 6px);
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(1);
+    max-width:calc(100% - 8px);max-height:calc(100% - 8px);
     width:auto;height:auto;z-index:2;display:block;
+    transition:transform .25s ease;
   }
   /* logos supplied as dark-on-transparent PNG/SVG get lifted to read on dark bg */
   .bubble img.invert{filter:invert(1) grayscale(1) brightness(1.9);}
   /* solid-color logos (e.g. a single brand blue) that read as near-black/illegible
      on the dark bg — flattens to a clean white mark regardless of original hue */
   .bubble img.whiteout{filter:brightness(0) invert(1);}
-  /* logos that are flat/opaque photos (no transparency, baked-in light background)
-     sit on a light chip instead of the dark bubble bg so they read as intentional,
-     not like a mismatched square floating in a circle */
-  .bubble.on-light{background:#F2F1EC;}
-  .timeline-item:hover .bubble.on-light,.edu-item:hover .bubble.on-light{background:#FFFFFF;}
+  /* full-colour brand marks (Boeing, Ruhrpumpen, Walltopia, Vacamsa) sit on a
+     clean white disc so the logo reads exactly as the brand intends */
+  .bubble.on-light{background:#FFFFFF;border-color:#FFFFFF;}
+  .bubble.on-light img{max-width:calc(100% - 6px);max-height:calc(100% - 12px);}
   .bubble .monogram{
     font-family:'Space Grotesk', sans-serif;font-size:15px;font-weight:600;
     letter-spacing:0.02em;color:var(--muted);z-index:1;user-select:none;
+    transition:color .25s ease;
   }
-  .bubble-lg{width:64px;height:64px;}
+  /* once a logo file actually loads, drop the fallback letters behind it —
+     otherwise transparent PNGs show the monogram through the artwork */
+  .bubble.has-logo .monogram{display:none;}
+  .bubble-lg{width:66px;height:66px;}
   .bubble-lg .monogram{font-size:18px;}
-  .bubble-lg img{max-width:calc(100% - 8px);max-height:calc(100% - 8px);}
-  .timeline-item:hover .bubble,.edu-item:hover .bubble{
-    border-color:var(--muted-2);background:var(--bg-3);transform:translateY(-1px);
+  .bubble-lg img{max-width:calc(100% - 10px);max-height:calc(100% - 10px);}
+
+  /* one shared hover behaviour for EVERY bubble — education and experience alike */
+  :is(.timeline-item,.edu-item):hover .bubble,
+  .bubble:hover{
+    border-color:var(--muted-2);transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(0,0,0,0.45);
   }
-  .timeline-item:hover .bubble .monogram,.edu-item:hover .bubble .monogram{color:var(--ink);}
+  :is(.timeline-item,.edu-item):hover .bubble:not(.on-light),
+  .bubble:not(.on-light):hover{background:var(--bg-3);}
+  :is(.timeline-item,.edu-item):hover .bubble.on-light,
+  .bubble.on-light:hover{background:#FFFFFF;border-color:#FFFFFF;}
+  :is(.timeline-item,.edu-item):hover .bubble img,
+  .bubble:hover img{transform:translate(-50%,-50%) scale(1.08);}
+  :is(.timeline-item,.edu-item):hover .bubble .monogram,
+  .bubble:hover .monogram{color:var(--ink);}
 
   /* ---------- EDUCATION ---------- */
   .edu-block{margin-top:36px;padding:24px 0 0;border-top:1px solid var(--line);}
@@ -190,7 +220,7 @@
     letter-spacing:0.12em;color:var(--muted);margin-bottom:6px;
   }
   .timeline-item{
-    display:grid;grid-template-columns:54px 1fr;gap:18px;align-items:start;
+    display:grid;grid-template-columns:60px 1fr;gap:18px;align-items:start;
     padding:22px 0;border-top:1px solid var(--line);
   }
   .timeline-item:last-child{border-bottom:1px solid var(--line);}
@@ -260,16 +290,72 @@
   }
   .modal-overlay.open .modal{transform:translateY(0);}
   .modal-close{
-    position:absolute;top:20px;right:20px;background:none;border:1px solid var(--line);
+    position:absolute;top:20px;right:20px;border:1px solid rgba(255,255,255,0.25);
+    background:rgba(10,10,10,0.62);backdrop-filter:blur(3px);
     color:var(--ink);width:38px;height:38px;font-size:20px;cursor:pointer;z-index:5;
-    display:flex;align-items:center;justify-content:center;transition:border-color .15s ease;
+    display:flex;align-items:center;justify-content:center;transition:border-color .15s ease, background .15s ease;
   }
-  .modal-close:hover{border-color:var(--ink);}
+  .modal-close:hover{border-color:var(--ink);background:rgba(10,10,10,0.9);}
   .modal-visual{
-    aspect-ratio:16/10;background:var(--bg-2);display:flex;align-items:center;justify-content:center;
-    border-bottom:1px solid var(--line);position:relative;overflow:hidden;
+    background:var(--bg-2);border-bottom:1px solid var(--line);
+    position:relative;overflow:hidden;
   }
+  /* single photo / video / icon slide */
+  .modal-visual.is-media{aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;}
+  /* contact-sheet slide: every still from the project, laid out as one board */
+  .modal-visual.is-layout{padding:18px 18px 40px;}
   .modal-visual svg{width:16%;opacity:0.9;}
+
+  /* ---------- PROJECT LAYOUT BOARD ---------- */
+  .mv-layout{display:grid;gap:10px;}
+  .mv-layout.row-3{grid-template-columns:repeat(3,1fr);}
+  .mv-layout.pair{grid-template-columns:repeat(2,1fr);}
+  .mv-layout.quad{grid-template-columns:repeat(2,1fr);}
+  .mv-layout.hero-2{grid-template-columns:repeat(2,1fr);}
+  .mv-layout.hero-2 .tile:first-child{grid-column:1 / -1;aspect-ratio:16/8;}
+  .mv-layout.stack{grid-template-columns:1fr;}
+  .mv-layout .tile{
+    position:relative;aspect-ratio:4/3;background:var(--bg);
+    border:1px solid var(--line);overflow:hidden;cursor:zoom-in;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .mv-layout.quad .tile{aspect-ratio:1/1;}
+  .mv-layout.stack .tile{aspect-ratio:auto;}
+  .mv-layout .tile img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;}
+  .mv-layout.stack .tile img{height:auto;}
+  .mv-layout .tile:hover{border-color:var(--muted-2);transform:translateY(-2px);}
+  .mv-layout .tile .zoom{
+    position:absolute;bottom:8px;right:8px;font-family:'IBM Plex Mono';font-size:9.5px;
+    color:var(--ink);background:rgba(10,10,10,0.65);border:1px solid rgba(255,255,255,0.18);
+    padding:3px 7px;border-radius:20px;opacity:0;transition:opacity .18s ease;
+  }
+  .mv-layout .tile:hover .zoom{opacity:1;}
+
+  /* video / embed slide */
+  .mv-embed{position:absolute;inset:0;width:100%;height:100%;border:0;}
+  .mv-soon{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:14px;text-align:center;padding:32px;color:var(--muted);
+  }
+  .mv-soon .play{
+    width:56px;height:56px;border-radius:50%;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--muted);
+  }
+  .mv-soon p{margin:0;font-family:'IBM Plex Mono';font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;}
+  .modal-visual.is-media img.media-contain{cursor:zoom-in;}
+  .mv-caption{
+    position:absolute;bottom:14px;left:14px;z-index:4;font-family:'IBM Plex Mono';font-size:10px;
+    color:var(--ink);background:rgba(10,10,10,0.6);border:1px solid rgba(255,255,255,0.18);
+    padding:4px 9px;border-radius:20px;backdrop-filter:blur(2px);
+  }
+
+  /* full-size image lightbox (click any tile) */
+  .lightbox{
+    position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.94);
+    display:none;align-items:center;justify-content:center;padding:48px;cursor:zoom-out;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%;max-height:100%;object-fit:contain;}
   .gallery-nav{
     position:absolute;top:50%;transform:translateY(-50%);z-index:4;
     width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,0.25);
@@ -312,18 +398,31 @@
   .lead-card p{font-size:13.5px;color:var(--muted);margin:0;}
 
   /* ---------- CERTIFICATIONS ---------- */
-  .cert-note{font-size:14px;color:var(--muted);max-width:640px;margin:-20px 0 40px;}
   .cert-list{border-top:1px solid var(--line);}
   .cert-row{
-    display:grid;grid-template-columns:100px 1fr 170px;gap:24px;align-items:center;
+    display:grid;grid-template-columns:100px 1fr;gap:24px;align-items:baseline;
     padding:26px 0;border-bottom:1px solid var(--line);
   }
   .cert-row .cert-date{font-family:'IBM Plex Mono';font-size:12px;color:var(--muted);}
   .cert-row h3{font-size:17px;margin-bottom:5px;}
+  /* the certificate title IS the link — no separate "view" column */
+  .cert-row h3 a{
+    border-bottom:1px solid rgba(255,255,255,0.22);padding-bottom:1px;
+    transition:border-color .15s ease,color .15s ease;
+  }
+  .cert-row h3 a:hover{border-color:var(--ink);}
+  .cert-row h3 a .ext{font-size:12px;color:var(--muted);margin-left:5px;}
   .cert-row .issuer{font-size:13.5px;color:var(--muted);font-family:'IBM Plex Mono';}
-  .cert-row .cert-id{font-family:'IBM Plex Mono';font-size:11px;color:var(--muted);text-align:right;}
-  .cert-row .cert-id a{color:var(--ink);border-bottom:1px solid var(--ink);}
-  .cert-row .cert-id a:hover{color:var(--muted);border-color:var(--muted);}
+  /* grouped box — several certificates from one issuer in a single row */
+  .cert-items{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:9px;}
+  .cert-items li{font-size:15px;display:flex;align-items:baseline;gap:9px;}
+  .cert-items li::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--muted-2);flex:0 0 auto;transform:translateY(-3px);}
+  .cert-items a{
+    border-bottom:1px solid rgba(255,255,255,0.22);padding-bottom:1px;
+    transition:border-color .15s ease;
+  }
+  .cert-items a:hover{border-color:var(--ink);}
+  .cert-items a .ext{font-size:12px;color:var(--muted);margin-left:5px;}
 
   /* ---------- HOBBIES ---------- */
   .hobby-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
@@ -362,20 +461,26 @@
     .menu-btn{display:block;}
     .hero-bg-diagram{opacity:0.3;width:100%;}
     .about-grid{grid-template-columns:1fr;gap:48px;}
+    .about-copy{position:static;}
     .about-photo{max-width:340px;}
     .proj-grid{grid-template-columns:1fr 1fr;}
     .lead-grid{grid-template-columns:1fr;}
     .hobby-grid{grid-template-columns:1fr;}
     .cert-row{grid-template-columns:1fr;gap:8px;}
-    .cert-row .cert-id{text-align:left;}
     .modal-body{padding:32px 24px 36px;}
+    .mv-layout.row-3{grid-template-columns:1fr 1fr;}
+    .mv-layout.row-3 .tile:first-child{grid-column:1 / -1;}
     section{padding:90px 0;}
   }
   @media (max-width:560px){
     .wrap{padding:0 22px;}
     .navbar{padding:0 22px;}
-    .stat-row{gap:32px;}
+    .contact-row{gap:26px;}
+    .contact-row .ci a{font-size:17px;}
     .proj-grid{grid-template-columns:1fr;}
+    .mv-layout.row-3,.mv-layout.quad,.mv-layout.hero-2{grid-template-columns:1fr;}
+    .modal-visual.is-layout{padding:12px 12px 36px;}
+    .lightbox{padding:20px;}
     .bubble{width:44px;height:44px;}
     .bubble-lg{width:50px;height:50px;}
     .bubble .monogram{font-size:13px;}
@@ -427,10 +532,10 @@
     <div class="eyebrow" id="heroEyebrow"></div>
     <h1 id="heroHeadline"></h1>
     <p class="role" id="heroRole"></p>
-    <div class="stat-row" id="heroStats"></div>
+    <div class="contact-row" id="heroContact"></div>
     <div class="btn-row">
       <a href="#projects" class="btn btn-primary">View Projects</a>
-      <a href="assets/resume.pdf" class="btn btn-ghost" download>Download Resume ↓</a>
+      <a href="#" class="btn btn-ghost" id="heroResume">Download Resume ↓</a>
     </div>
   </div>
 </section>
@@ -480,6 +585,9 @@
   </div>
 </div>
 
+<!-- full-size image viewer -->
+<div class="lightbox" id="lightbox"><img id="lightboxImg" alt=""></div>
+
 <!-- LEADERSHIP -->
 <section id="leadership">
   <div class="wrap">
@@ -492,7 +600,6 @@
 <section id="certifications">
   <div class="wrap">
     <div class="sheet-label"><span class="num">04</span><span class="title">Certifications</span><span class="rule"></span></div>
-    <p class="cert-note">To show the actual PDF/image of a diploma or certificate, drop the file into <span class="mono">assets/certs/</span> and add its filename to that entry's <span class="mono">fileUrl</span> in the script below — a "View Certificate" link will appear automatically.</p>
     <div class="cert-list" id="certList"></div>
   </div>
 </section>
@@ -537,6 +644,16 @@ const ICONS = {
   report: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9"><path d="M6 2h9l3 3v17H6z"/><path d="M15 2v4h3"/><path d="M9 11h6M9 15h6M9 7h2"/></svg>'
 };
 
+/* Brand marks for the four company logos — trimmed of their surrounding
+   dead space and embedded directly here, so the page needs no extra files.
+   They sit on the white bubble used by `onLight:true` entries. */
+const LOGOS = {
+  boeing: "data:image/png;base64,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",
+  ruhrpumpen: "data:image/png;base64,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",
+  walltopia: "data:image/png;base64,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",
+  vacamsa: "data:image/png;base64,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",
+};
+
 const CONTENT = {
   brand: "Nicolas Alvarez Arce",
   nav: [
@@ -550,13 +667,19 @@ const CONTENT = {
   hero: {
     eyebrow: "Mechanical Engineer — Los Angeles, CA",
     headlineHtml: "Engineering<br>the hardware<br>that moves.",
-    role: "From Boeing-sponsored materials research to autonomous vehicles and high-power rocketry — I design, build, and test systems where precision meets the real world.",
-    stats: [
-      {value:"2.5 yrs", label:"Boeing-Sponsored Research"},
-      {value:"30+",     label:"AM Samples Tested"},
-      {value:"−15%",    label:"Manufacturing Cycle Time"},
-      {value:"12",      label:"Engineering Projects"}
-    ]
+    role: "From Boeing-sponsored materials research to autonomous vehicles and high-power rocketry — I design, build, and test systems where precision meets the real world."
+  },
+
+  // ---- CONTACT: shown in the hero and reused in the footer ----
+  // To add the Mexican line as well, just fill in phoneAlt / phoneAltHref below.
+  contact: {
+    email:        "aarcenicolas@gmail.com",
+    linkedin:     "https://www.linkedin.com/in/alvarezni",
+    linkedinLabel:"linkedin.com/in/alvarezni",
+    phone:        "+1 (323) 599-5698",
+    phoneHref:    "tel:+13235995698",
+    phoneAlt:     "",   // e.g. "+52 55 4341 5592"
+    phoneAltHref: ""    // e.g. "tel:+525543415592"
   },
 
   about: {
@@ -585,15 +708,19 @@ const CONTENT = {
         logo: "assets/logos/asf.png", monogram:"ASF", invert:false
       }
     ],
-    resumeUrl: "assets/resume.pdf",
-    // set to an image path (e.g. "assets/images/portrait.jpg") to replace the placeholder box
+    // the résumé file that ships with the repo; `resumeFileName` is what a
+    // recruiter's browser saves it as
+    resumeUrl: "assets/Nicolas%20Alvarez%3B%20Mechanical%20Engineer%20.pdf",
+    resumeFileName: "Nicolas Alvarez - Mechanical Engineer Resume.pdf",
+    // set to an image path (e.g. "assets/images/portrait.jpg") to show a portrait
     photoUrl: null,
+    // listed newest first
     timeline: [
-      {when:"Nov 2022 — May 2025", role:"Student Research Assistant, Materials Lab", org:"LMU · Boeing-sponsored research",
-        logo:"assets/logos/boeing.png", monogram:"BA", invert:false, onLight:true,
-        desc:"Hardness and tensile testing on 30+ AlSi10Mg additively manufactured samples, cross-referenced with optical/SEM microstructure analysis to inform post-processing heat-treatment standards. Presented to 20+ engineers and faculty at ASME meetings; contributing to a manuscript under peer review."},
+      {when:"Jul 2026 — Present", role:"Mechanical Engineering Intern", org:"Walltopia · Sofia, Bulgaria",
+        logo:LOGOS.walltopia, monogram:"WT", invert:false, onLight:true,
+        desc:"Supported compliance and safety analysis for climbing structures under EN 12572 (Parts 1–3) and amusement-ride standard EN 13814, including certification of safety-critical components like autobelays. Ran load verification and safety analysis for a new product line, \"The Tilt,\" and collaborated cross-functionally on Rollglider deliveries — including a project for the Georgia Aquarium in Atlanta. Also audited and merged the after-sales customer database to re-engage inactive clients."},
       {when:"May 2024 — Oct 2024", role:"Project Engineer Intern", org:"Ruhrpumpen · Monterrey, Mexico",
-        logo:"assets/logos/ruhrpumpen.png", monogram:"RP", invert:false, onLight:true,
+        logo:LOGOS.ruhrpumpen, monogram:"RP", invert:false, onLight:true,
         desc:"Process mapping, time studies, and KPI/defect analysis for API-class pump programs — Lean Six Sigma improvements cut cycle times by up to 15%. Managed purchase orders, inspection plans, and supplier documentation against API, ASME, and ISO standards."},
       {when:"Aug 2023 — Dec 2023", role:"Mechanical Engineer", org:"LMU Fluids of Astrophysical Bodies Lab",
         logo:"assets/logos/lmu.png", monogram:"FAB", invert:false,
@@ -601,32 +728,41 @@ const CONTENT = {
       {when:"May 2023 — Aug 2023", role:"Student Research Assistant", org:"LMU Thermal Fluids Lab",
         logo:"assets/logos/lmu.png", monogram:"TF", invert:false,
         desc:"Microdroplet lifetime research for PCB and vapor-chamber cooling. Machined a thermocouple-embedded copper test surface and processed LabVIEW/DAQ data in MATLAB to characterize residence time and heat transfer."},
+      {when:"Nov 2022 — May 2025", role:"Student Research Assistant, Materials Lab", org:"LMU · Boeing-sponsored research",
+        logo:LOGOS.boeing, monogram:"BA", invert:false, onLight:true,
+        desc:"Hardness and tensile testing on 30+ AlSi10Mg additively manufactured samples, cross-referenced with optical/SEM microstructure analysis to inform post-processing heat-treatment standards. Presented to 20+ engineers and faculty at ASME meetings; contributing to a manuscript under peer review."},
       {when:"Jun 2020 — Jul 2021", role:"Sales Associate", org:"Vacamsa S.A. de C.V. · Mexico City",
-        logo:"assets/logos/vacamsa.jpg", monogram:"VC", invert:false, onLight:true,
-        desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."},
-
-      // if "Jul 2026" isn't the year you meant, just edit the "when" below
-      {when:"Jul 2026 — Present", role:"Mechanical Engineering Intern", org:"Walltopia · Sofia, Bulgaria",
-        logo:"assets/logos/walltopia.jpg", monogram:"WT", invert:false, onLight:true,
-        desc:"Supported compliance and safety analysis for climbing structures under EN 12572 (Parts 1–3) and amusement-ride standard EN 13814, including certification of safety-critical components like autobelays. Ran load verification and safety analysis for a new product line, \"The Tilt,\" and collaborated cross-functionally on Rollglider deliveries — including a project for the Georgia Aquarium in Atlanta. Also audited and merged the after-sales customer database to re-engage inactive clients."}
+        logo:LOGOS.vacamsa, monogram:"VC", invert:false, onLight:true,
+        desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."}
     ]
   },
 
   // ---- PROJECTS: add, remove, or reorder entries freely. Grid re-flows automatically. ----
-  // To add real photos/videos to any project, set `media` to an ARRAY of entries — the
-  // card shows the first one, and the modal becomes a swipeable gallery of all of them:
-  //   media: [
-  //     { type:"image", src:"assets/images/rocket-launch.jpg" },
-  //     { type:"video", src:"assets/videos/rocket-launch.mp4" }
-  //   ]
-  // Leave it as an empty array [] to keep the default line-art icon.
+  //
+  //  media   : the project's stills. Slide 1 of the gallery arranges ALL of them on one
+  //            board (click any tile to open it full size); each one also gets its own
+  //            full-size slide afterwards.
+  //  layout  : how that board is arranged —
+  //              "row-3"  three across            (drone, IGVC, balancing robot)
+  //              "hero-2" one wide + two below    (FEA)
+  //              "quad"   2 × 2                   (kitesurf)
+  //              "stack"  full-width, one per row (rocket)
+  //              "pair"   two across
+  //  feature : the SECOND slide — a video or a presentation.
+  //              { type:"youtube", id:"XXXXXXXXXXX", caption:"..." }   ← paste the 11-character
+  //                 YouTube ID from the share link (youtu.be/XXXXXXXXXXX). Leave id:"" and the
+  //                 slide politely says the video is coming.
+  //              { type:"image", src:"...", caption:"..." }            ← a poster / slide deck page
+  //              { type:"video", src:"assets/videos/clip.mp4" }        ← a file in the repo
   projects: [
-    { id:"rocket2stage", category:"eng", icon:"rocket", media:[
-        {type:"image", src:"assets/images/rocket-pic.jpg"},
-        {type:"image", src:"assets/images/avionics-bay.png"},
-        {type:"image", src:"assets/images/rocket-blueprint.png"},
-        {type:"image", src:"assets/images/rocket-blueprint-alt.png"}
+    { id:"rocket2stage", category:"eng", icon:"rocket", layout:"stack",
+      thumb:"assets/images/Rocket%20Blueprint.png", media:[
+        {type:"image", src:"assets/images/Rocket%20pic.jpg", caption:"Flight vehicle, built"},
+        {type:"image", src:"assets/images/Rocket%20Blueprint.png", caption:"Stage layouts — booster and sustainer"},
+        {type:"image", src:"assets/images/Rocket%20Avionics.png", caption:"Avionics bay"}
       ],
+      // ← paste the YouTube ID of the launch video here
+      feature:{type:"youtube", id:"", caption:"Launch video"},
       title:"Two-Stage Solid Rocket System",
       shortDesc:"Booster–sustainer staging, avionics, and dual-deployment recovery for high-power flight.",
       tagline:"High-Power Rocketry · Avionics",
@@ -635,11 +771,12 @@ const CONTENT = {
       bullets:["Booster–sustainer staging with independent ignition sequencing","CP–CG stability analysis and trajectory simulation for safe staging","Flight computer for telemetry logging and staging logic","Fabricated airframe and internal structures; conducted igniter and separation ground tests"],
       tags:["Propulsion","Avionics","Structures"] },
 
-    { id:"igvc", category:"eng", icon:"rover", media:[
-        {type:"image", src:"assets/images/ugv-actual.png"},
-        {type:"image", src:"assets/images/ugv-cad.png"},
-        {type:"image", src:"assets/images/ugv-vision-mapping.png"}
+    { id:"igvc", category:"eng", icon:"rover", layout:"row-3", media:[
+        {type:"image", src:"assets/images/IGVC.png", caption:"Vehicle on course"},
+        {type:"image", src:"assets/images/IGVC%20VISON%20AND%20MAPPING.png", caption:"Perception and SLAM map"},
+        {type:"image", src:"assets/images/IGVC%20CAD.png", caption:"Chassis CAD"}
       ],
+      feature:{type:"image", src:"assets/images/IGVC%20Design%20Showcase%20Poster.pptx.png", caption:"IGVC Design Showcase presentation"},
       title:"IGVC Autonomous Ground Vehicle",
       shortDesc:"Perception, mapping, and real-time control on a custom autonomous platform.",
       tagline:"ROS2 · SLAM · Mechatronics",
@@ -648,11 +785,13 @@ const CONTENT = {
       bullets:["Modular, weatherproof T-slotted aluminum chassis with payload capacity","LiDAR, GNSS, IMU, and depth camera for SLAM-based navigation","Jetson–Arduino motor-control interface to mitigate ROS control latency","Real-world testing: lane following, obstacle navigation, emergency stop"],
       tags:["ROS2","SLAM","Jetson"] },
 
-    { id:"drone", category:"eng", icon:"drone", media:[
-        {type:"image", src:"assets/images/drone-competition.png"},
-        {type:"image", src:"assets/images/drone-pid-response.png"},
-        {type:"image", src:"assets/images/drone-path-vs-commands.jpg"}
+    { id:"drone", category:"eng", icon:"drone", layout:"row-3", media:[
+        {type:"image", src:"assets/images/Drone%20Competiotion.png", caption:"Head-to-head competition run"},
+        {type:"image", src:"assets/images/Drone%20path%20vs%20comands.jpg", caption:"Commanded path vs. flown path"},
+        {type:"image", src:"assets/images/Drone%20PID%20response.png", caption:"Root locus and step response"}
       ],
+      // ← paste the YouTube ID of the flight video here
+      feature:{type:"youtube", id:"", caption:"Flight video"},
       title:"Autonomous Basketball Drone",
       shortDesc:"Flight controls and release optimization using ballistic prediction and PID.",
       tagline:"Flight Controls · System Modeling",
@@ -662,7 +801,7 @@ const CONTENT = {
       tags:["PID","MATLAB","Controls"] },
 
     { id:"convection", category:"eng", icon:"table", media:[
-        {type:"image", src:"assets/images/rotation-table-cad.png"}
+        {type:"image", src:"assets/images/Rotation%20Table%20CAD.png", caption:"Rotary convection table — CAD"}
       ],
       title:"Rotary Convection Table",
       shortDesc:"CAD/FEA rig simulating planetary thermal convection for icy-moon research.",
@@ -672,10 +811,10 @@ const CONTENT = {
       bullets:["SolidWorks CAD models and FEA verifying structural integrity under rotation/thermal load","Addressed heat distribution and rotational stability challenges","Contributed to a proposal submitted to NASA JPL on ice-creep behavior"],
       tags:["SolidWorks","FEA","Thermal"] },
 
-    { id:"finsfea", category:"eng", icon:"fin", media:[
-        {type:"image", src:"assets/images/fea-stress-fins.png"},
-        {type:"image", src:"assets/images/fea-fin-cells.png"},
-        {type:"image", src:"assets/images/fea-full-rocket.png"}
+    { id:"finsfea", category:"eng", icon:"fin", layout:"hero-2", media:[
+        {type:"image", src:"assets/images/FEA%20full%20rocket.png", caption:"Full-vehicle model"},
+        {type:"image", src:"assets/images/FEA%20Stress%20of%20the%20fins.png", caption:"Max principal stress — fins"},
+        {type:"image", src:"assets/images/FEA%20fin%20cells.png", caption:"Refined fin mesh"}
       ],
       title:"FEA — Rocket Fins, Mach 3",
       shortDesc:"Structural study of carbon-fiber fins under Mach-3 aerodynamic loading.",
@@ -685,10 +824,10 @@ const CONTENT = {
       bullets:["Modeled aerodynamic loading at 92.6 psi (1389 N/m)","Identified 99 MPa peak Von Mises stress at the fin root (FEA)","Predicted 2 mm tip deflection analytically; FEA returned ~45 nm","Applied composite material properties (E = 230–250 GPa) with refined meshing"],
       tags:["Abaqus","Composites","FEA"] },
 
-    { id:"robot", category:"eng", icon:"robot", media:[
-        {type:"image", src:"assets/images/self-balancing-robot-front.jpg"},
-        {type:"image", src:"assets/images/self-balancing-robot-action.jpg"},
-        {type:"image", src:"assets/images/balancing-robot-math.png"}
+    { id:"robot", category:"eng", icon:"robot", layout:"row-3", media:[
+        {type:"image", src:"assets/images/Self%20Balancing%20Robot%20Math.png", caption:"Tilt-angle derivation"},
+        {type:"image", src:"assets/images/Self%20Balancing%20Robot%20front.jpg", caption:"Front view"},
+        {type:"image", src:"assets/images/Self%20Balancing%20Robot%20in%20Action.jpg", caption:"Balancing under disturbance"}
       ],
       title:"Self-Balancing Robot",
       shortDesc:"Inverted-pendulum robot with IMU-driven PID stabilization.",
@@ -716,18 +855,11 @@ const CONTENT = {
       bullets:["Derived and implemented inverse kinematics mapping commanded pose to six actuator lengths","Full mechanical assembly in SolidWorks including joints and platform geometry","Kinematic workspace analysis run before committing to fabrication","Real-time motion control for smooth trajectory tracking"],
       tags:["Kinematics","SolidWorks","Controls"] },
 
-    { id:"dictamenes", category:"data", icon:"report",
-      title:"Mechanical Dictámenes",
-      shortDesc:"Formal failure-analysis reports diagnosing equipment failures and corrective action.",
-      tagline:"Failure Analysis · Technical Reporting",
-      fullDesc:"Authored formal mechanical assessment reports (dictámenes) diagnosing equipment failures — documenting observed conditions, probable root cause, and recommended corrective action to support repair-versus-replace decisions.",
-      stats:[{value:"Root Cause",label:"Analysis Method"},{value:"On-Site",label:"Inspection"}],
-      bullets:["On-site inspection and failure-mode analysis against applicable standards","Correlated physical evidence with operating history and design specifications","Structured each report around observed condition, root cause, and prioritized corrective action","Delivered technical findings in terms non-technical stakeholders could act on"],
-      tags:["Failure Analysis","Documentation"] },
-
-    { id:"kitesurf", category:"eng", icon:"gear", media:[
-        {type:"image", src:"assets/images/kitesurf-camera-in-use.png"},
-        {type:"image", src:"assets/images/kitesurf-camera-exploded.png"}
+    { id:"kitesurf", category:"eng", icon:"gear", layout:"quad", media:[
+        {type:"image", src:"assets/images/Kitesurf%20Exploded%20view.png", caption:"Exploded assembly"},
+        {type:"image", src:"assets/images/Kitesurf%20product%20picture.png", caption:"Packed rig"},
+        {type:"image", src:"assets/images/Kitesurf%20CAD.png", caption:"Harness mount — CAD"},
+        {type:"image", src:"assets/images/Kitesurf%20In%20use.png", caption:"In use on the water"}
       ],
       title:"360° Kitesurfing Camera Gear",
       shortDesc:"Wearable, extendable camera arm for stabilized action-sports footage.",
@@ -738,8 +870,9 @@ const CONTENT = {
       tags:["CAD","Prototyping"] },
 
     { id:"materials", category:"eng", icon:"material", media:[
-        {type:"image", src:"assets/images/materials-lab.png"}
+        {type:"image", src:"assets/images/AlSi10Mg%20Lab.png", caption:"Tensile and hardness testing"}
       ],
+      feature:{type:"image", src:"assets/images/AlSi10Mg%20Poster%20%282%29.pptx.png", caption:"Research poster"},
       title:"Materials Research — AlSi10Mg Overaging",
       shortDesc:"Long-term mechanical-property degradation study with LMU and Boeing.",
       tagline:"Additive Manufacturing · Boeing",
@@ -749,7 +882,7 @@ const CONTENT = {
       tags:["SEM","Metallurgy","Boeing"] },
 
     { id:"ruhrpumpen", category:"data", icon:"chart", media:[
-        {type:"image", src:"assets/images/ruhrpumpen-photo.jpg"}
+        {type:"image", src:"assets/images/Ruhpumphen.jpg", caption:"Pump assembly line"}
       ],
       title:"Process & KPI Analytics — Ruhrpumpen",
       shortDesc:"Process mapping and KPI/defect analysis for industrial pump manufacturing.",
@@ -769,32 +902,34 @@ const CONTENT = {
     {role:"Department Head", title:"GAMMA — Computer Education", desc:"Led the Computer Education department for a student-run initiative delivering free schooling to students from underserved public schools in Mexico City. Designed and taught a year-long computer literacy curriculum across two sections: typing, digital literacy, online safety and personal data protection, and introductory programming."}
   ],
 
-  // add fileUrl:"assets/certs/yourfile.pdf" to any entry to show a "View Certificate" link
+  // The title itself is the link to the PDF — add fileUrl:"assets/certs/yourfile.pdf".
+  // Use `items:[...]` instead of `title` to group several certificates from one issuer
+  // into a single box.
   certifications: [
-    {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program", note:"Awarded Jul 02, 2025", fileUrl:"assets/certs/nasa-arset.pdf"},
-    {date:"2026", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement", note:"Issued Jun 9, 2026", fileUrl:"assets/certs/lean-six-sigma-green-belt.pdf"},
-    {date:"2026", title:"Google Data Analytics Certificate", issuer:"Google Career Certificates · Coursera", note:"Issued Jul 28, 2026", fileUrl:"assets/certs/google-data-analytics.pdf"},
-    // year unconfirmed — set the correct date once you have it
-    {date:"—",    title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia", note:"Certified", fileUrl:"assets/certs/climbing-walls-standards-en12572.pdf"},
-    {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate", note:"Issued Jul 31, 2020", fileUrl:"assets/certs/harvardx-prescription-drugs.pdf"},
-    // TODO: confirm exact issue dates/issuer names for these three — placeholders below
-    {date:"—",    title:"Claude 101", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/claude-101.pdf"},
-    {date:"—",    title:"AI Fluency Framework", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/ai-fluency-framework.pdf"},
-    {date:"—",    title:"AI Fluency for Nonprofits", issuer:"Anthropic Academy", note:"Certified", fileUrl:"assets/certs/ai-fluency-nonprofits.pdf"}
+    {date:"2026", title:"Google Data Analytics Professional Certificate", issuer:"Google Career Certificates · Coursera",
+      fileUrl:"assets/certs/GoogleDataAnalyticsProfessionalCertificatev.3_Badge20260728-21-v23c21.pdf"},
+    {date:"2026", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement",
+      fileUrl:"assets/certs/Nicolas%20Alvarez_Green.pdf"},
+    {date:"2026", title:"AI Fluency & Applied AI", issuer:"Anthropic Academy", items:[
+        {title:"AI Fluency Framework",        fileUrl:"assets/certs/ai-fluency-framework.pdf"},
+        {title:"AI Fluency for Nonprofits",   fileUrl:"assets/certs/ai-fluency-nonprofits.pdf"},
+        {title:"Claude 101",                  fileUrl:"assets/certs/claude-101.pdf"}
+      ]},
+    {date:"2026", title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia",
+      fileUrl:"assets/certs/climbing-walls-standards-en12572.pdf"},
+    {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program",
+      fileUrl:"assets/certs/nasa-arset.pdf"},
+    {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate",
+      fileUrl:"assets/certs/harvardx-prescription-drugs.pdf"}
   ],
 
   // add media:{type:"image", src:"assets/images/climbing.jpg"} (or type:"video") to any entry for a real photo/video
   hobbies: [
     {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:null,
-      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk. (Photos coming soon.)"},
+      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk."},
     {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>', media:null,
-      title:"Photography", desc:"Documenting builds, launches, and trips — often from a wearable rig of my own design. (Photos coming soon.)"}
-  ],
-
-  footer: {
-    email: "aarcenicolas@gmail.com",
-    linkedin: "https://www.linkedin.com/in/alvarezni"
-  }
+      title:"Photography", desc:"Documenting builds, launches, and trips — often from a wearable rig of my own design."}
+  ]
 };
 
 /* =========================================================================
@@ -815,9 +950,29 @@ CONTENT.nav.forEach(item => {
 document.getElementById('heroEyebrow').textContent = CONTENT.hero.eyebrow;
 document.getElementById('heroHeadline').innerHTML = CONTENT.hero.headlineHtml;
 document.getElementById('heroRole').textContent = CONTENT.hero.role;
-const heroStats = document.getElementById('heroStats');
-CONTENT.hero.stats.forEach(s => {
-  heroStats.insertAdjacentHTML('beforeend', `<div class="stat"><b>${s.value}</b><span>${s.label}</span></div>`);
+/* ---- hero contact block ---- */
+const MAIL_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>';
+const LI_ICON   = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 100 5 2.5 2.5 0 000-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95C21.4 8.75 22 11 22 14v7h-4v-6.2c0-1.5-.03-3.4-2.1-3.4-2.1 0-2.4 1.6-2.4 3.3V21h-4z"/></svg>';
+const TEL_ICON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 006.5 6.5L17 13l4 1.5v3a2 2 0 01-2.2 2A16.5 16.5 0 013.5 5.2 2 2 0 015.5 3z"/></svg>';
+
+const C = CONTENT.contact;
+const contactItems = [
+  {label:"Email",    href:`mailto:${C.email}`, text:C.email, icon:MAIL_ICON},
+  {label:"LinkedIn", href:C.linkedin, text:C.linkedinLabel, icon:LI_ICON, blank:true},
+  {label:"Phone",    href:C.phoneHref, text:C.phone, icon:TEL_ICON}
+];
+if(C.phoneAlt) contactItems.push({label:"Phone · MX", href:C.phoneAltHref, text:C.phoneAlt, icon:TEL_ICON});
+
+document.getElementById('heroContact').innerHTML = contactItems.map(i => `
+  <div class="ci">
+    <span>${i.label}</span>
+    <a href="${i.href}"${i.blank ? ' target="_blank" rel="noopener"' : ''}>${i.icon}${i.text}</a>
+  </div>`).join('');
+
+/* ---- résumé buttons: real file, clean download name ---- */
+document.querySelectorAll('#heroResume').forEach(a => {
+  a.setAttribute('href', CONTENT.about.resumeUrl);
+  a.setAttribute('download', CONTENT.about.resumeFileName);
 });
 
 /* ---- logo bubble ----
@@ -829,9 +984,12 @@ function bubble(entry, size){
     .replace(/[^A-Za-z ]/g,'').trim().split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
   const cls = 'bubble' + (size === 'lg' ? ' bubble-lg' : '') + (entry.onLight ? ' on-light' : '');
   const filterClass = entry.forceWhite ? 'whiteout' : (entry.invert ? 'invert' : '');
+  // onload → hide the monogram so it never shows through a transparent logo
+  // onerror → drop the broken image and keep the monogram as the fallback
   const img = entry.logo
     ? `<img src="${entry.logo}" alt="${entry.org || entry.school || ''} logo"
             class="${filterClass}" loading="lazy"
+            onload="this.parentNode.classList.add('has-logo')"
             onerror="this.remove()">`
     : '';
   return `<div class="${cls}"><span class="monogram">${mono}</span>${img}</div>`;
@@ -853,13 +1011,19 @@ CONTENT.about.education.forEach(e => {
   </div>`;
 });
 aboutHtml += `</div>
-<div class="btn-row" style="margin-top:32px;"><a href="${CONTENT.about.resumeUrl}" class="btn btn-primary" download>Download Full Résumé ↓</a></div>`;
+<div class="btn-row" style="margin-top:32px;">
+  <a href="${CONTENT.about.resumeUrl}" class="btn btn-primary" download="${CONTENT.about.resumeFileName}">Download Full Résumé ↓</a>
+</div>`;
 aboutCopy.innerHTML = aboutHtml;
 
+/* portrait: shown when photoUrl is set, otherwise the empty frame is removed
+   entirely so the page never advertises a missing photo */
+const photoBox = document.getElementById('aboutPhoto');
 if(CONTENT.about.photoUrl){
-  const photoBox = document.getElementById('aboutPhoto');
   photoBox.querySelector('p').remove();
   photoBox.insertAdjacentHTML('afterbegin', `<img class="media-fill" src="${CONTENT.about.photoUrl}" alt="Portrait">`);
+} else {
+  photoBox.remove();
 }
 
 const timeline = document.getElementById('timeline');
@@ -877,45 +1041,102 @@ CONTENT.about.timeline.forEach(t => {
     </div>`);
 });
 
-// card thumbnail: shows the first media item, plus a count badge if there's more than one
+// card thumbnail: shows the first media item, plus a badge describing what's inside
 function cardVisual(p, iconSvg){
   const list = p.media || [];
   if(!list.length) return iconSvg || '';
-  const m = list[0];
+  // `thumb` (optional) overrides which still is used on the card
+  const m = p.thumb ? {type:'image', src:p.thumb} : list[0];
   const el = m.type === 'video'
     ? `<video class="media-fill" src="${m.src}" muted loop playsinline></video>`
     : `<img class="media-fill" src="${m.src}" alt="">`;
-  const badge = list.length > 1 ? `<span class="media-count mono">${list.length} photos</span>` : '';
+  const bits = [];
+  if(list.length > 1) bits.push(`${list.length} photos`);
+  if(p.feature) bits.push(p.feature.type === 'image' ? 'presentation' : 'video');
+  const badge = bits.length ? `<span class="media-count mono">${bits.join(' · ')}</span>` : '';
   return el + badge;
 }
 
-/* ---- modal gallery ---- */
+/* ---- modal gallery ----
+   Slide 1 = the layout board (every still at once, click a tile to zoom)
+   Slide 2 = the feature — video or presentation
+   Slides 3+ = each still, full size                                        */
+function buildSlides(p){
+  const imgs = p.media || [];
+  const slides = [];
+  if(imgs.length > 1) slides.push({type:'layout', layout:p.layout || 'row-3', items:imgs});
+  if(p.feature) slides.push(p.feature);
+  imgs.forEach(m => slides.push(m));
+  return slides;
+}
+
 let modalMedia = [];
 let modalIndex = 0;
 let modalIconFallback = '';
+
+function slideHtml(m){
+  if(m.type === 'layout'){
+    return `<div class="mv-layout ${m.layout}">` + m.items.map(it => `
+      <div class="tile" data-full="${it.src}">
+        <img src="${it.src}" alt="${it.caption || ''}" loading="lazy">
+        <span class="zoom mono">${it.caption ? it.caption + ' · ' : ''}zoom</span>
+      </div>`).join('') + `</div>`;
+  }
+  if(m.type === 'youtube'){
+    return m.id
+      ? `<iframe class="mv-embed" src="https://www.youtube.com/embed/${m.id}?rel=0"
+                 title="${m.caption || 'Video'}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                 allowfullscreen></iframe>`
+      : `<div class="mv-soon">
+           <span class="play"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+           <p>${m.caption || 'Video'} — coming soon</p>
+         </div>`;
+  }
+  if(m.type === 'video'){
+    return `<video class="media-contain" src="${m.src}" autoplay muted loop playsinline controls></video>`;
+  }
+  return `<img class="media-contain" src="${m.src}" alt="${m.caption || ''}">`
+       + (m.caption ? `<span class="mv-caption">${m.caption}</span>` : '');
+}
+
 function renderModalMedia(){
   const container = document.getElementById('modalVisual');
+  container.classList.remove('is-layout','is-media');
   if(!modalMedia.length){
+    container.classList.add('is-media');
     container.innerHTML = modalIconFallback;
     return;
   }
   const m = modalMedia[modalIndex];
-  const el = m.type === 'video'
-    ? `<video class="media-contain" src="${m.src}" autoplay muted loop playsinline controls></video>`
-    : `<img class="media-contain" src="${m.src}" alt="">`;
+  container.classList.add(m.type === 'layout' ? 'is-layout' : 'is-media');
+
   let nav = '';
   if(modalMedia.length > 1){
-    nav += `<button class="gallery-nav prev" id="galPrev" aria-label="Previous photo">‹</button>`;
-    nav += `<button class="gallery-nav next" id="galNext" aria-label="Next photo">›</button>`;
+    nav += `<button class="gallery-nav prev" id="galPrev" aria-label="Previous">‹</button>`;
+    nav += `<button class="gallery-nav next" id="galNext" aria-label="Next">›</button>`;
     nav += `<div class="gallery-dots">${modalMedia.map((_,i) => `<span class="dot${i===modalIndex?' active':''}" data-i="${i}"></span>`).join('')}</div>`;
   }
-  container.innerHTML = el + nav;
+  container.innerHTML = slideHtml(m) + nav;
+
   if(modalMedia.length > 1){
     document.getElementById('galPrev').addEventListener('click', () => { modalIndex = (modalIndex - 1 + modalMedia.length) % modalMedia.length; renderModalMedia(); });
     document.getElementById('galNext').addEventListener('click', () => { modalIndex = (modalIndex + 1) % modalMedia.length; renderModalMedia(); });
     container.querySelectorAll('.dot').forEach(d => d.addEventListener('click', () => { modalIndex = +d.dataset.i; renderModalMedia(); }));
   }
+  container.querySelectorAll('.tile').forEach(t =>
+    t.addEventListener('click', () => openLightbox(t.dataset.full)));
+  const solo = container.querySelector('img.media-contain');
+  if(solo) solo.addEventListener('click', () => openLightbox(solo.getAttribute('src')));
 }
+
+/* ---- full-size image viewer ---- */
+const lightbox = document.getElementById('lightbox');
+function openLightbox(src){
+  document.getElementById('lightboxImg').src = src;
+  lightbox.classList.add('open');
+}
+function closeLightbox(){ lightbox.classList.remove('open'); }
+lightbox.addEventListener('click', closeLightbox);
 
 const projGrid = document.getElementById('projGrid');
 CONTENT.projects.forEach((p, i) => {
@@ -942,12 +1163,20 @@ CONTENT.leadership.forEach(l => {
 });
 
 const certList = document.getElementById('certList');
+const certLink = (label, url) => url
+  ? `<a href="${url}" target="_blank" rel="noopener">${label}<span class="ext">↗</span></a>`
+  : label;
 CONTENT.certifications.forEach(c => {
+  const heading = c.items
+    ? `<h3>${c.title}</h3>`
+    : `<h3>${certLink(c.title, c.fileUrl)}</h3>`;
+  const group = c.items
+    ? `<ul class="cert-items">${c.items.map(i => `<li>${certLink(i.title, i.fileUrl)}</li>`).join('')}</ul>`
+    : '';
   certList.insertAdjacentHTML('beforeend', `
     <div class="cert-row">
       <div class="cert-date mono">${c.date}</div>
-      <div><h3>${c.title}</h3><div class="issuer">${c.issuer}</div></div>
-      <div class="cert-id">${c.fileUrl ? `<a href="${c.fileUrl}" target="_blank" rel="noopener">View Certificate ↗</a>` : c.note}</div>
+      <div>${heading}<div class="issuer">${c.issuer}</div>${group}</div>
     </div>`);
 });
 
@@ -968,13 +1197,16 @@ CONTENT.hobbies.forEach(h => {
 
 const footerLinks = document.getElementById('footerLinks');
 footerLinks.innerHTML = `
-  <a href="mailto:${CONTENT.footer.email}">${CONTENT.footer.email}</a>
-  <a href="${CONTENT.footer.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a>`;
+  <a href="mailto:${C.email}">${C.email}</a>
+  <a href="${C.phoneHref}">${C.phone}</a>
+  ${C.phoneAlt ? `<a href="${C.phoneAltHref}">${C.phoneAlt}</a>` : ''}
+  <a href="${C.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a>
+  <a href="${CONTENT.about.resumeUrl}" download="${CONTENT.about.resumeFileName}">Résumé ↓</a>`;
 
 /* ---- modal logic ---- */
 const modalOverlay = document.getElementById('modalOverlay');
 function openModal(p){
-  modalMedia = p.media || [];
+  modalMedia = buildSlides(p);
   modalIndex = 0;
   modalIconFallback = ICONS[p.icon] || '';
   renderModalMedia();
@@ -989,12 +1221,17 @@ function openModal(p){
 }
 function closeModal(){
   modalOverlay.classList.remove('open');
+  document.getElementById('modalVisual').innerHTML = '';   // stops any playing video
   document.body.style.overflow = '';
 }
 document.getElementById('modalClose').addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', e => { if(e.target === modalOverlay) closeModal(); });
 document.addEventListener('keydown', e => {
-  if(e.key === 'Escape') closeModal();
+  if(e.key === 'Escape'){
+    if(lightbox.classList.contains('open')){ closeLightbox(); return; }
+    closeModal();
+  }
+  if(lightbox.classList.contains('open')) return;
   if(!modalOverlay.classList.contains('open') || modalMedia.length < 2) return;
   if(e.key === 'ArrowRight'){ modalIndex = (modalIndex + 1) % modalMedia.length; renderModalMedia(); }
   if(e.key === 'ArrowLeft'){ modalIndex = (modalIndex - 1 + modalMedia.length) % modalMedia.length; renderModalMedia(); }
