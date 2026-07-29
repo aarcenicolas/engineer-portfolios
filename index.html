@@ -145,7 +145,7 @@
   }
   .bubble img{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    max-width:calc(100% - 12px);max-height:calc(100% - 12px);
+    max-width:calc(100% - 6px);max-height:calc(100% - 6px);
     width:auto;height:auto;z-index:2;display:block;
   }
   /* logos supplied as dark-on-transparent PNG/SVG get lifted to read on dark bg */
@@ -164,7 +164,7 @@
   }
   .bubble-lg{width:64px;height:64px;}
   .bubble-lg .monogram{font-size:18px;}
-  .bubble-lg img{max-width:calc(100% - 14px);max-height:calc(100% - 14px);}
+  .bubble-lg img{max-width:calc(100% - 8px);max-height:calc(100% - 8px);}
   .timeline-item:hover .bubble,.edu-item:hover .bubble{
     border-color:var(--muted-2);background:var(--bg-3);transform:translateY(-1px);
   }
@@ -430,7 +430,7 @@
     <div class="stat-row" id="heroStats"></div>
     <div class="btn-row">
       <a href="#projects" class="btn btn-primary">View Projects</a>
-      <a href="resume.pdf" class="btn btn-ghost" download>Download Resume ↓</a>
+      <a href="assets/resume.pdf" class="btn btn-ghost" download>Download Resume ↓</a>
     </div>
   </div>
 </section>
@@ -585,7 +585,7 @@ const CONTENT = {
         logo: "assets/logos/asf.png", monogram:"ASF", invert:false
       }
     ],
-    resumeUrl: "resume.pdf",
+    resumeUrl: "assets/resume.pdf",
     // set to an image path (e.g. "assets/images/portrait.jpg") to replace the placeholder box
     photoUrl: null,
     timeline: [
@@ -772,8 +772,8 @@ const CONTENT = {
   // add fileUrl:"assets/certs/yourfile.pdf" to any entry to show a "View Certificate" link
   certifications: [
     {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program", note:"Awarded Jul 02, 2025", fileUrl:"assets/certs/nasa-arset.pdf"},
-    {date:"2024", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement", note:"Certified", fileUrl:null},
-    {date:"2023", title:"Google Data Analytics Certificate", issuer:"Google Career Certificates", note:"Certified", fileUrl:null},
+    {date:"2026", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement", note:"Issued Jun 9, 2026", fileUrl:"assets/certs/lean-six-sigma-green-belt.pdf"},
+    {date:"2026", title:"Google Data Analytics Certificate", issuer:"Google Career Certificates · Coursera", note:"Issued Jul 28, 2026", fileUrl:"assets/certs/google-data-analytics.pdf"},
     // year unconfirmed — set the correct date once you have it
     {date:"—",    title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia", note:"Certified", fileUrl:"assets/certs/climbing-walls-standards-en12572.pdf"},
     {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate", note:"Issued Jul 31, 2020", fileUrl:"assets/certs/harvardx-prescription-drugs.pdf"},
