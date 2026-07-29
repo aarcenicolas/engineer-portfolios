@@ -145,11 +145,14 @@
   }
   .bubble img{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    max-width:calc(100% - 20px);max-height:calc(100% - 20px);
+    max-width:calc(100% - 12px);max-height:calc(100% - 12px);
     width:auto;height:auto;z-index:2;display:block;
   }
   /* logos supplied as dark-on-transparent PNG/SVG get lifted to read on dark bg */
   .bubble img.invert{filter:invert(1) grayscale(1) brightness(1.9);}
+  /* solid-color logos (e.g. a single brand blue) that read as near-black/illegible
+     on the dark bg — flattens to a clean white mark regardless of original hue */
+  .bubble img.whiteout{filter:brightness(0) invert(1);}
   /* logos that are flat/opaque photos (no transparency, baked-in light background)
      sit on a light chip instead of the dark bubble bg so they read as intentional,
      not like a mismatched square floating in a circle */
@@ -161,7 +164,7 @@
   }
   .bubble-lg{width:64px;height:64px;}
   .bubble-lg .monogram{font-size:18px;}
-  .bubble-lg img{max-width:calc(100% - 22px);max-height:calc(100% - 22px);}
+  .bubble-lg img{max-width:calc(100% - 14px);max-height:calc(100% - 14px);}
   .timeline-item:hover .bubble,.edu-item:hover .bubble{
     border-color:var(--muted-2);background:var(--bg-3);transform:translateY(-1px);
   }
@@ -587,10 +590,10 @@ const CONTENT = {
     photoUrl: null,
     timeline: [
       {when:"Nov 2022 — May 2025", role:"Student Research Assistant, Materials Lab", org:"LMU · Boeing-sponsored research",
-        logo:"assets/logos/boeing.png", monogram:"BA", invert:false,
+        logo:"assets/logos/boeing.png", monogram:"BA", invert:false, forceWhite:true,
         desc:"Hardness and tensile testing on 30+ AlSi10Mg additively manufactured samples, cross-referenced with optical/SEM microstructure analysis to inform post-processing heat-treatment standards. Presented to 20+ engineers and faculty at ASME meetings; contributing to a manuscript under peer review."},
       {when:"May 2024 — Oct 2024", role:"Project Engineer Intern", org:"Ruhrpumpen · Monterrey, Mexico",
-        logo:"assets/logos/ruhrpumpen.png", monogram:"RP", invert:false,
+        logo:"assets/logos/ruhrpumpen.png", monogram:"RP", invert:false, forceWhite:true,
         desc:"Process mapping, time studies, and KPI/defect analysis for API-class pump programs — Lean Six Sigma improvements cut cycle times by up to 15%. Managed purchase orders, inspection plans, and supplier documentation against API, ASME, and ISO standards."},
       {when:"Aug 2023 — Dec 2023", role:"Mechanical Engineer", org:"LMU Fluids of Astrophysical Bodies Lab",
         logo:"assets/logos/lmu.png", monogram:"FAB", invert:false,
@@ -600,19 +603,12 @@ const CONTENT = {
         desc:"Microdroplet lifetime research for PCB and vapor-chamber cooling. Machined a thermocouple-embedded copper test surface and processed LabVIEW/DAQ data in MATLAB to characterize residence time and heat transfer."},
       {when:"Jun 2020 — Jul 2021", role:"Sales Associate", org:"Vacamsa S.A. de C.V. · Mexico City",
         logo:"assets/logos/vacamsa.jpg", monogram:"VC", invert:false, onLight:true,
-        desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."}
+        desc:"Commercialized pipe, valve, and fitting packages for an infrastructure group serving 13 countries across 7 industrial sectors. Advised on sizing, material selection, and maintenance, and supported material supply for the 340,000 bbl/day Dos Bocas refinery project."},
 
-      /* ── WALLTOPIA — needs your input before it goes live ────────────────
-         The résumé bank flags this as the single entry that best proves the
-         "adventure infrastructure" throughline, but only has "Walltopia, sales"
-         plus the European Norms certification. Send me: exact title, location,
-         dates, region covered, roughly how many clients/projects, and whether
-         you touched technical drawings or purely commercial. Then uncomment:
-
-      ,{when:"[dates]", role:"[title]", org:"Walltopia · [location]",
+      // dates unconfirmed — set the correct "when" (and location, if not Sofia) once you have them
+      {when:"[dates]", role:"Mechanical Engineering Intern", org:"Walltopia · Sofia, Bulgaria",
         logo:"assets/logos/walltopia.jpg", monogram:"WT", invert:false, onLight:true,
-        desc:"Supported sales and technical specification of climbing wall systems, translating client concepts into buildable configurations compliant with EN 12572 for artificial climbing structures."}
-      ──────────────────────────────────────────────────────────────────── */
+        desc:"Supported compliance and safety analysis for climbing structures under EN 12572 (Parts 1–3) and amusement-ride standard EN 13814, including certification of safety-critical components like autobelays. Ran load verification and safety analysis for a new product line, \"The Tilt,\" and collaborated cross-functionally on Rollglider deliveries — including a project for the Georgia Aquarium in Atlanta. Also audited and merged the after-sales customer database to re-engage inactive clients."}
     ]
   },
 
@@ -832,9 +828,10 @@ function bubble(entry, size){
   const mono = entry.monogram || (entry.org || entry.school || '?')
     .replace(/[^A-Za-z ]/g,'').trim().split(/\s+/).slice(0,2).map(w => w[0]).join('').toUpperCase();
   const cls = 'bubble' + (size === 'lg' ? ' bubble-lg' : '') + (entry.onLight ? ' on-light' : '');
+  const filterClass = entry.forceWhite ? 'whiteout' : (entry.invert ? 'invert' : '');
   const img = entry.logo
     ? `<img src="${entry.logo}" alt="${entry.org || entry.school || ''} logo"
-            class="${entry.invert ? 'invert' : ''}" loading="lazy"
+            class="${filterClass}" loading="lazy"
             onerror="this.remove()">`
     : '';
   return `<div class="${cls}"><span class="monogram">${mono}</span>${img}</div>`;
