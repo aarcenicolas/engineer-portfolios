@@ -312,17 +312,19 @@
   .mv-layout.pair{grid-template-columns:repeat(2,1fr);}
   .mv-layout.quad{grid-template-columns:repeat(2,1fr);}
   .mv-layout.hero-2{grid-template-columns:repeat(2,1fr);}
-  .mv-layout.hero-2 .tile:first-child{grid-column:1 / -1;aspect-ratio:16/8;}
+  .mv-layout.hero-2 .tile:first-child{grid-column:1 / -1;aspect-ratio:auto;height:clamp(150px,24vh,250px);}
   .mv-layout.stack{grid-template-columns:1fr;}
   .mv-layout .tile{
     position:relative;aspect-ratio:4/3;background:var(--bg);
     border:1px solid var(--line);overflow:hidden;cursor:zoom-in;
     transition:border-color .18s ease, transform .18s ease;
   }
-  .mv-layout.quad .tile{aspect-ratio:1/1;}
-  .mv-layout.stack .tile{aspect-ratio:auto;}
+  /* keep the taller boards compact so the write-up peeks below and signals scroll */
+  .mv-layout.quad .tile{aspect-ratio:auto;height:clamp(120px,19vh,200px);}
+  .mv-layout.stack .tile{aspect-ratio:auto;height:clamp(110px,18vh,190px);}
+  .mv-layout.hero-2 .tile:not(:first-child){aspect-ratio:auto;height:clamp(110px,17vh,180px);}
   .mv-layout .tile img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;}
-  .mv-layout.stack .tile img{height:auto;}
+  .mv-layout.stack .tile img{height:100%;}
   .mv-layout .tile:hover{border-color:var(--muted-2);transform:translateY(-2px);}
   .mv-layout .tile .zoom{
     position:absolute;bottom:8px;right:8px;font-family:'IBM Plex Mono';font-size:9.5px;
@@ -439,6 +441,37 @@
   .hobby-card h3, .hobby-card p{position:relative;z-index:2;}
   .hobby-card h3{font-size:22px;margin-bottom:8px;text-transform:uppercase;}
   .hobby-card p{font-size:13.5px;color:var(--muted);margin:0;max-width:380px;}
+
+  /* ---------- HOBBIES GALLERY (Outdoors & Photography) ---------- */
+  .hobby-gallery{grid-column:1 / -1;background:var(--bg-2);padding:32px 32px 28px;position:relative;}
+  .hobby-gallery .hg-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px;flex-wrap:wrap;}
+  .hobby-gallery .hg-head h3{font-size:22px;text-transform:uppercase;margin:0 0 6px;}
+  .hobby-gallery .hg-head p{font-size:13.5px;color:var(--muted);margin:0;max-width:520px;}
+  .hobby-gallery .hg-hint{font-family:'IBM Plex Mono';font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;white-space:nowrap;}
+  .hg-viewport{position:relative;}
+  .hg-strip{
+    display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+    padding-bottom:10px;scrollbar-width:thin;scrollbar-color:var(--muted-2) transparent;
+  }
+  .hg-strip::-webkit-scrollbar{height:6px;}
+  .hg-strip::-webkit-scrollbar-track{background:transparent;}
+  .hg-strip::-webkit-scrollbar-thumb{background:var(--muted-2);border-radius:20px;}
+  .hg-item{
+    flex:0 0 auto;height:clamp(190px,32vh,300px);scroll-snap-align:center;position:relative;
+    background:var(--bg);border:1px solid var(--line);overflow:hidden;cursor:zoom-in;
+    transition:border-color .18s ease, transform .18s ease;
+  }
+  .hg-item:hover{border-color:var(--muted-2);transform:translateY(-2px);}
+  .hg-item img{height:100%;width:auto;max-width:none;object-fit:cover;display:block;}
+  .hg-item[data-loading]{width:60px;}
+  .hg-nav{
+    position:absolute;top:calc(50% - 5px);transform:translateY(-50%);width:40px;height:40px;
+    border:1px solid rgba(255,255,255,0.22);background:rgba(10,10,10,0.6);backdrop-filter:blur(3px);
+    color:var(--ink);font-size:20px;cursor:pointer;z-index:3;display:flex;align-items:center;
+    justify-content:center;border-radius:50%;transition:border-color .15s ease, background .15s ease, opacity .15s ease;
+  }
+  .hg-nav:hover{border-color:var(--ink);background:rgba(10,10,10,0.85);}
+  .hg-nav.prev{left:8px;} .hg-nav.next{right:8px;}
 
   /* ---------- FOOTER ---------- */
   footer{padding:64px 0 48px;}
@@ -713,12 +746,12 @@ const CONTENT = {
     resumeUrl: "assets/Nicolas%20Alvarez%3B%20Mechanical%20Engineer%20.pdf",
     resumeFileName: "Nicolas Alvarez - Mechanical Engineer Resume.pdf",
     // set to an image path (e.g. "assets/images/portrait.jpg") to show a portrait
-    photoUrl: null,
+    photoUrl: "assets/hobbies/Headshot.png",
     // listed newest first
     timeline: [
       {when:"Jul 2026 — Present", role:"Mechanical Engineering Intern", org:"Walltopia · Sofia, Bulgaria",
         logo:LOGOS.walltopia, monogram:"WT", invert:false, onLight:true,
-        desc:"Supported compliance and safety analysis for climbing structures under EN 12572 (Parts 1–3) and amusement-ride standard EN 13814, including certification of safety-critical components like autobelays. Ran load verification and safety analysis for a new product line, \"The Tilt,\" and collaborated cross-functionally on Rollglider deliveries — including a project for the Georgia Aquarium in Atlanta. Also audited and merged the after-sales customer database to re-engage inactive clients."},
+        desc:"Ran load verification and safety analysis for climbing structures under EN 12572 and amusement-ride standard EN 13814 — including autobelay certification and a new product line, \"The Tilt.\" Collaborated on Rollglider deliveries (including the Georgia Aquarium in Atlanta) and merged the after-sales database to re-engage inactive clients."},
       {when:"May 2024 — Oct 2024", role:"Project Engineer Intern", org:"Ruhrpumpen · Monterrey, Mexico",
         logo:LOGOS.ruhrpumpen, monogram:"RP", invert:false, onLight:true,
         desc:"Process mapping, time studies, and KPI/defect analysis for API-class pump programs — Lean Six Sigma improvements cut cycle times by up to 15%. Managed purchase orders, inspection plans, and supplier documentation against API, ASME, and ISO standards."},
@@ -923,12 +956,15 @@ const CONTENT = {
       fileUrl:"assets/certs/harvardx-prescription-drugs.pdf"}
   ],
 
-  // add media:{type:"image", src:"assets/images/climbing.jpg"} (or type:"video") to any entry for a real photo/video
+  // Outdoors & Photography share the same frames, so they live in one scrolling
+  // gallery. Drop images into assets/hobbies/ named p1, p2, p3 … and they appear
+  // automatically, in order. Missing numbers are skipped; .jpg/.JPG/.png/.webp all work.
   hobbies: [
-    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21l6-6M14 4l6 6M9 15l-3 3M15 5l3 3M6 18l6-6 3 3-6 6z"/></svg>', media:null,
-      title:"Outdoors", desc:"Rock climbing, kitesurfing, and rowing on the water — most weekends start outside, not at a desk."},
-    {icon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="4"/><path d="M8 6l1.5-2h5L16 6"/></svg>', media:null,
-      title:"Photography", desc:"Documenting builds, launches, and trips — often from a wearable rig of my own design."}
+    { gallery:true,
+      title:"Outdoors & Photography",
+      desc:"Climbing, kitesurfing, and rowing — usually with a camera along, often on a wearable rig of my own design. A few frames from outside the lab.",
+      photoPrefix:"assets/hobbies/p",  // files are p1, p2, … under this prefix
+      photoCount:16 }                  // highest pN number to look for
   ]
 };
 
@@ -1180,8 +1216,52 @@ CONTENT.certifications.forEach(c => {
     </div>`);
 });
 
+/* ---- hobby image gallery ----
+   Tries each pN with a few common extensions; the first that loads wins,
+   and any number with no matching file is silently dropped. */
+function hgTryNext(img){
+  const exts = (img.dataset.exts || '').split(',').filter(Boolean);
+  if(exts.length){
+    img.dataset.exts = exts.slice(1).join(',');
+    img.src = img.dataset.base + '.' + exts[0];
+  } else {
+    const item = img.closest('.hg-item');
+    if(item) item.remove();
+  }
+}
+function galleryHtml(h){
+  const exts = ['jpg','JPG','jpeg','png','PNG','webp'];
+  let tiles = '';
+  for(let i = 1; i <= (h.photoCount || 12); i++){
+    const base = h.photoPrefix + i;
+    tiles += `
+      <figure class="hg-item" data-loading>
+        <img loading="lazy" alt="Nicolas — outdoors & photography"
+             src="${base}.${exts[0]}" data-base="${base}" data-exts="${exts.slice(1).join(',')}"
+             onerror="hgTryNext(this)"
+             onload="this.closest('.hg-item').removeAttribute('data-loading')">
+      </figure>`;
+  }
+  return `
+    <div class="hobby-gallery">
+      <div class="hg-head">
+        <div><h3>${h.title}</h3><p>${h.desc}</p></div>
+        <span class="hg-hint">scroll to browse →</span>
+      </div>
+      <div class="hg-viewport">
+        <button class="hg-nav prev" aria-label="Previous">‹</button>
+        <div class="hg-strip">${tiles}</div>
+        <button class="hg-nav next" aria-label="Next">›</button>
+      </div>
+    </div>`;
+}
+
 const hobbyGrid = document.getElementById('hobbyGrid');
 CONTENT.hobbies.forEach(h => {
+  if(h.gallery){
+    hobbyGrid.insertAdjacentHTML('beforeend', galleryHtml(h));
+    return;
+  }
   const hasMedia = h.media && h.media.src;
   const hobbyMediaHtml = hasMedia
     ? (h.media.type === 'video'
@@ -1194,6 +1274,37 @@ CONTENT.hobbies.forEach(h => {
       <h3>${h.title}</h3><p>${h.desc}</p>
     </div>`);
 });
+
+/* ---- wire up the gallery: arrows, click-to-zoom, gentle auto-advance ---- */
+(function initHobbyGallery(){
+  const strip = document.querySelector('.hg-strip');
+  if(!strip) return;
+  const prev = document.querySelector('.hg-nav.prev');
+  const next = document.querySelector('.hg-nav.next');
+  const stepWidth = () => {
+    const item = strip.querySelector('.hg-item:not([data-loading])');
+    return item ? item.getBoundingClientRect().width + 12 : 260;
+  };
+  const atEnd = () => strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4;
+  if(prev) prev.addEventListener('click', () => strip.scrollBy({left:-stepWidth(), behavior:'smooth'}));
+  if(next) next.addEventListener('click', () => strip.scrollBy({left: stepWidth(), behavior:'smooth'}));
+  // click any frame to open it full size in the existing lightbox
+  strip.addEventListener('click', e => {
+    const img = e.target.closest('.hg-item img');
+    if(img) openLightbox(img.currentSrc || img.src);
+  });
+  // gentle auto-advance; pauses on hover or manual interaction
+  let timer = setInterval(advance, 3800);
+  function advance(){
+    if(atEnd()) strip.scrollTo({left:0, behavior:'smooth'});
+    else strip.scrollBy({left:stepWidth(), behavior:'smooth'});
+  }
+  function pause(){ clearInterval(timer); timer = null; }
+  function resume(){ if(!timer) timer = setInterval(advance, 3800); }
+  strip.addEventListener('mouseenter', pause);
+  strip.addEventListener('mouseleave', resume);
+  strip.addEventListener('touchstart', pause, {passive:true});
+})();
 
 const footerLinks = document.getElementById('footerLinks');
 footerLinks.innerHTML = `
