@@ -312,17 +312,17 @@
   .mv-layout.pair{grid-template-columns:repeat(2,1fr);}
   .mv-layout.quad{grid-template-columns:repeat(2,1fr);}
   .mv-layout.hero-2{grid-template-columns:repeat(2,1fr);}
-  .mv-layout.hero-2 .tile:first-child{grid-column:1 / -1;aspect-ratio:auto;height:clamp(150px,24vh,250px);}
+  .mv-layout.hero-2 .tile:first-child{grid-column:1 / -1;aspect-ratio:auto;height:clamp(200px,34vh,360px);}
   .mv-layout.stack{grid-template-columns:1fr;}
   .mv-layout .tile{
     position:relative;aspect-ratio:4/3;background:var(--bg);
     border:1px solid var(--line);overflow:hidden;cursor:zoom-in;
     transition:border-color .18s ease, transform .18s ease;
   }
-  /* keep the taller boards compact so the write-up peeks below and signals scroll */
-  .mv-layout.quad .tile{aspect-ratio:auto;height:clamp(120px,19vh,200px);}
-  .mv-layout.stack .tile{aspect-ratio:auto;height:clamp(110px,18vh,190px);}
-  .mv-layout.hero-2 .tile:not(:first-child){aspect-ratio:auto;height:clamp(110px,17vh,180px);}
+  /* keep the taller boards a touch compact so the write-up peeks below and signals scroll */
+  .mv-layout.quad .tile{aspect-ratio:auto;height:clamp(180px,30vh,300px);}
+  .mv-layout.stack .tile{aspect-ratio:auto;height:clamp(160px,27vh,320px);}
+  .mv-layout.hero-2 .tile:not(:first-child){aspect-ratio:auto;height:clamp(150px,25vh,260px);}
   .mv-layout .tile img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;}
   .mv-layout.stack .tile img{height:100%;}
   .mv-layout .tile:hover{border-color:var(--muted-2);transform:translateY(-2px);}
