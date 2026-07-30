@@ -321,13 +321,15 @@
   }
   /* larger boards; thumbnails fill their frame (full image opens on click) */
   .mv-layout.quad .tile{aspect-ratio:auto;height:clamp(220px,35vh,360px);}
-  .mv-layout.stack .tile{aspect-ratio:auto;height:clamp(200px,32vh,380px);}
   .mv-layout.hero-2 .tile:not(:first-child){aspect-ratio:auto;height:clamp(190px,29vh,320px);}
+  .mv-layout.row-3 .tile{aspect-ratio:auto;height:clamp(175px,23vh,240px);}
+  /* stack (rocket): keep the whole photo in view — no cropping */
+  .mv-layout.stack .tile{aspect-ratio:auto;height:clamp(160px,27vh,320px);}
   .mv-layout .tile img{width:100%;height:100%;object-fit:contain;display:block;padding:4px;}
-  /* the three tall layouts fill edge-to-edge so there's no letterbox blank space */
-  .mv-layout.stack .tile img,
+  /* these layouts fill edge-to-edge so there's no letterbox blank space */
   .mv-layout.quad .tile img,
-  .mv-layout.hero-2 .tile img{object-fit:cover;padding:0;height:100%;}
+  .mv-layout.hero-2 .tile img,
+  .mv-layout.row-3 .tile img{object-fit:cover;padding:0;height:100%;}
   .mv-layout .tile:hover{border-color:var(--muted-2);transform:translateY(-2px);}
   .mv-layout .tile .zoom{
     position:absolute;bottom:8px;right:8px;font-family:'IBM Plex Mono';font-size:9.5px;
