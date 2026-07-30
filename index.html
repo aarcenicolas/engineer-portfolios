@@ -958,13 +958,13 @@ const CONTENT = {
 
   // Outdoors & Photography share the same frames, so they live in one scrolling
   // gallery. Drop images into assets/hobbies/ named p1, p2, p3 … and they appear
-  // automatically, in order. Missing numbers are skipped; .jpg/.JPG/.png/.webp all work.
+  // automatically, in order — no code changes, no limit on how many you add.
+  // Missing numbers are skipped; .jpg/.JPG/.jpeg/.png/.webp all work.
   hobbies: [
     { gallery:true,
       title:"Outdoors & Photography",
       desc:"Climbing, kitesurfing, and rowing — usually with a camera along, often on a wearable rig of my own design. A few frames from outside the lab.",
-      photoPrefix:"assets/hobbies/p",  // files are p1, p2, … under this prefix
-      photoCount:16 }                  // highest pN number to look for
+      photoPrefix:"assets/hobbies/p" }  // files are p1, p2, p3 … under this prefix
   ]
 };
 
@@ -1217,31 +1217,46 @@ CONTENT.certifications.forEach(c => {
 });
 
 /* ---- hobby image gallery ----
-   Tries each pN with a few common extensions; the first that loads wins,
-   and any number with no matching file is silently dropped. */
-function hgTryNext(img){
-  const exts = (img.dataset.exts || '').split(',').filter(Boolean);
-  if(exts.length){
-    img.dataset.exts = exts.slice(1).join(',');
-    img.src = img.dataset.base + '.' + exts[0];
-  } else {
-    const item = img.closest('.hg-item');
-    if(item) item.remove();
+   Fully automatic: just drop images into assets/hobbies/ named p1, p2, p3 …
+   Nothing here needs editing. The loader walks p1 upward, tries a few common
+   extensions for each, and appends whatever it finds — in order. There is NO
+   fixed limit: it keeps going until it sees a run of GAP_STOP missing numbers,
+   so you can grow the gallery to any size. Small gaps in the numbering are fine. */
+const HG_EXTS = ['jpg','JPG','jpeg','png','PNG','webp'];
+const HG_GAP_STOP = 6;    // stop after this many consecutive missing numbers
+const HG_HARD_CAP = 300;  // absolute safety ceiling (you'll never reach this)
+
+// resolve the first extension that actually loads for a given "assets/hobbies/pN"
+function hgFindImage(base){
+  return new Promise(resolve => {
+    let i = 0;
+    const probe = new Image();
+    probe.onload  = () => resolve(probe.src);
+    probe.onerror = () => { i++; (i < HG_EXTS.length) ? (probe.src = base + '.' + HG_EXTS[i]) : resolve(null); };
+    probe.src = base + '.' + HG_EXTS[0];
+  });
+}
+async function hgLoadImages(strip, prefix){
+  let n = 1, gap = 0;
+  while(gap < HG_GAP_STOP && n <= HG_HARD_CAP){
+    const src = await hgFindImage(prefix + n);
+    if(src){
+      gap = 0;
+      const fig = document.createElement('figure');
+      fig.className = 'hg-item';
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.alt = 'Nicolas — outdoors & photography';
+      img.src = src;
+      fig.appendChild(img);
+      strip.appendChild(fig);
+    } else {
+      gap++;
+    }
+    n++;
   }
 }
 function galleryHtml(h){
-  const exts = ['jpg','JPG','jpeg','png','PNG','webp'];
-  let tiles = '';
-  for(let i = 1; i <= (h.photoCount || 12); i++){
-    const base = h.photoPrefix + i;
-    tiles += `
-      <figure class="hg-item" data-loading>
-        <img loading="lazy" alt="Nicolas — outdoors & photography"
-             src="${base}.${exts[0]}" data-base="${base}" data-exts="${exts.slice(1).join(',')}"
-             onerror="hgTryNext(this)"
-             onload="this.closest('.hg-item').removeAttribute('data-loading')">
-      </figure>`;
-  }
   return `
     <div class="hobby-gallery">
       <div class="hg-head">
@@ -1250,7 +1265,7 @@ function galleryHtml(h){
       </div>
       <div class="hg-viewport">
         <button class="hg-nav prev" aria-label="Previous">‹</button>
-        <div class="hg-strip">${tiles}</div>
+        <div class="hg-strip"></div>
         <button class="hg-nav next" aria-label="Next">›</button>
       </div>
     </div>`;
@@ -1260,6 +1275,7 @@ const hobbyGrid = document.getElementById('hobbyGrid');
 CONTENT.hobbies.forEach(h => {
   if(h.gallery){
     hobbyGrid.insertAdjacentHTML('beforeend', galleryHtml(h));
+    hgLoadImages(hobbyGrid.querySelector('.hg-strip'), h.photoPrefix);
     return;
   }
   const hasMedia = h.media && h.media.src;
