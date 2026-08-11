@@ -798,12 +798,12 @@ const CONTENT = {
       // ← paste the YouTube ID of the launch video here
       feature:{type:"youtube", id:"", caption:"Launch video"},
       title:"Two-Stage Solid Rocket System",
-      shortDesc:"Booster–sustainer staging, avionics, and dual-deployment recovery for high-power flight.",
+      shortDesc:"Booster–sustainer staging, avionics, and dual-deploy recovery for high-power flight.",
       tagline:"High-Power Rocketry · Avionics",
-      fullDesc:"Designed and built a two-stage solid-propellant rocket for high-power flight, integrating propulsion, structures, avionics, and recovery systems.",
-      stats:[{value:"2×",label:"Independent Stages"},{value:"Dual",label:"Deployment Recovery"}],
-      bullets:["Booster–sustainer staging with independent ignition sequencing","CP–CG stability analysis and trajectory simulation for safe staging","Flight computer for telemetry logging and staging logic","Fabricated airframe and internal structures; conducted igniter and separation ground tests"],
-      tags:["Propulsion","Avionics","Structures"] },
+      fullDesc:"Designed, simulated, and launched a two-stage solid-propellant rocket for high-power flight — reaching 1,506 m apogee at Mach 0.51, matching OpenRocket predictions and validated with onboard altimeter data. The build required earning Tripoli Level 1 and Level 2 certification across three qualification flights.",
+      stats:[{value:"1,506 m",label:"Apogee"},{value:"Mach 0.51",label:"Max Velocity"}],
+      bullets:["Reached 1,506 m apogee at Mach 0.51, matching OpenRocket trajectory and stability predictions (2.3 cal margin)","Earned Tripoli Level 1 and Level 2 across three qualification flights to qualify for the two-stage launch","Booster–sustainer staging with altimeter-triggered ignition and a timer backup","CP–CG stability analysis and trajectory simulation for safe staging","Dual-deploy recovery (drogue + main) returned the airframe undamaged","Fabricated airframe and internal structures; conducted igniter and separation ground tests"],
+      tags:["Propulsion","Avionics","OpenRocket","Recovery"] },
 
     { id:"igvc", category:"eng", icon:"rover", layout:"row-3", media:[
         {type:"image", src:"assets/images/IGVC.png", caption:"Vehicle on course"},
@@ -816,7 +816,7 @@ const CONTENT = {
       tagline:"ROS2 · SLAM · Mechatronics",
       fullDesc:"Designed an autonomous UGV for the Intelligent Ground Vehicle Competition, integrating perception, mapping, and real-time control on a custom platform.",
       stats:[{value:"4",label:"Sensors Fused"},{value:"Jetson",label:"Orin Nano Compute"}],
-      bullets:["Modular, weatherproof T-slotted aluminum chassis with payload capacity","LiDAR, GNSS, IMU, and depth camera for SLAM-based navigation","Jetson–Arduino motor-control interface to mitigate ROS control latency","Real-world testing: lane following, obstacle navigation, emergency stop"],
+      bullets:["Owned the drivetrain and structural build — two brushless motors and 25:1 planetary gearboxes on a modular T-slotted aluminum chassis","Re-machined the drive-motor mount from 3D-printed PLA to CNC aluminum after fatigue failure under the cantilevered drive shaft","LiDAR, GNSS, IMU, and depth camera for SLAM-based navigation (ROS2 / Nav2)","Jetson–Arduino motor-control interface to mitigate ROS control latency","Real-world testing: lane following, obstacle navigation, emergency stop"],
       tags:["ROS2","SLAM","Jetson"] },
 
     { id:"drone", category:"eng", icon:"drone", layout:"row-3", media:[
@@ -827,11 +827,11 @@ const CONTENT = {
       // ← paste the YouTube ID of the flight video here
       feature:{type:"youtube", id:"", caption:"Flight video"},
       title:"Autonomous Basketball Drone",
-      shortDesc:"Flight controls and release optimization using ballistic prediction and PID.",
+      shortDesc:"First-place drone with flight controls and ball-release optimization via PID and ballistic prediction.",
       tagline:"Flight Controls · System Modeling",
-      fullDesc:"Designed and tuned the control system for a drone that autonomously stabilizes, approaches a target, and releases a ball using ballistic prediction and PID-based flight control.",
-      stats:[{value:"±0.02m",label:"Release Tolerance"},{value:"PID",label:"Flight Control"}],
-      bullets:["Kinematic release logic with ±0.02 m alignment tolerance","Tuned natural frequencies (x: 1 rad/s, y: 1.5 rad/s) to reduce oscillation","Diagnosed compensator-induced instability from cross-axis coupling","Improved shot consistency with a +0.25 m elevation bias"],
+      fullDesc:"Designed and tuned, as primary developer, the control system for a drone that autonomously stabilizes, approaches a target, and releases a ball using ballistic prediction and PID-based flight control — the first-place entry in a class-wide controls-course competition.",
+      stats:[{value:"1st",label:"Place — Class Competition"},{value:"±0.02m",label:"Release Tolerance"}],
+      bullets:["First-place entry among all teams in the controls-course drone competition","PID and PD control modeled with transfer functions, root-locus, and step-response analysis in MATLAB","Kinematic release logic with ±0.02 m alignment tolerance","Tuned natural frequencies (x: 1 rad/s, y: 1.5 rad/s) to reduce oscillation","Diagnosed compensator-induced instability from cross-axis coupling","Improved shot consistency with a +0.25 m elevation bias"],
       tags:["PID","MATLAB","Controls"] },
 
     { id:"convection", category:"eng", icon:"table", media:[
@@ -863,6 +863,8 @@ const CONTENT = {
         {type:"image", src:"assets/images/Self%20Balancing%20Robot%20front.jpg", caption:"Front view"},
         {type:"image", src:"assets/images/Self%20Balancing%20Robot%20in%20Action.jpg", caption:"Balancing under disturbance"}
       ],
+      // ← paste the YouTube ID of the balancing demo here
+      feature:{type:"youtube", id:"", caption:"Balancing demo"},
       title:"Self-Balancing Robot",
       shortDesc:"Inverted-pendulum robot with IMU-driven PID stabilization.",
       tagline:"PID Control · IMU Fusion · Embedded",
@@ -912,7 +914,7 @@ const CONTENT = {
       tagline:"Additive Manufacturing · Boeing",
       fullDesc:"Researched long-term mechanical property degradation in AlSi10Mg fabricated by Laser Powder Bed Fusion, focusing on behavior near precipitation-hardening temperatures, in collaboration with LMU and Boeing.",
       stats:[{value:"30+",label:"Samples Tested"},{value:"130–190°C",label:"Overaging Range"}],
-      bullets:["Overaging studied at 130–190°C for 2–1000 hours, XY and Z orientations","Metallography identifying Si-precipitate coarsening","Tensile and hardness testing linking microstructure to performance","Data used by Boeing to refine post-processing heat-treatment standards"],
+      bullets:["Overaging studied at 130–190°C for 2–1000 hours, across XY and Z build orientations","Mapped a peak-aging curve — ultimate tensile strength rose ~10% before dropping ~30% with over-aging (hardness down ~35%)","Metallography (optical + SEM) identifying Si-precipitate coarsening as the driver","Tensile and hardness testing linking microstructure to performance","Data used by Boeing to refine post-processing heat-treatment standards; contributing to a manuscript under peer review"],
       tags:["SEM","Metallurgy","Boeing"] },
 
     { id:"ruhrpumpen", category:"data", icon:"chart", media:[
@@ -942,6 +944,8 @@ const CONTENT = {
   certifications: [
     {date:"2026", title:"Google Data Analytics Professional Certificate", issuer:"Google Career Certificates · Coursera",
       fileUrl:"assets/certs/GoogleDataAnalytics_Coursera_Certificate.pdf"},
+    {date:"2026", title:"Certified SOLIDWORKS Associate (CSWA)", issuer:"Dassault Systèmes",
+      fileUrl:"assets/certs/CSWA.pdf"},
     {date:"2026", title:"Lean Six Sigma — Green Belt", issuer:"Process Optimization & Quality Improvement",
       fileUrl:"assets/certs/Nicolas%20Alvarez_Green.pdf"},
     {date:"2026", title:"AI Fluency & Applied AI", issuer:"Anthropic Academy", items:[
@@ -951,6 +955,8 @@ const CONTENT = {
       ]},
     {date:"2026", title:"European Norms — Climbing Structures (EN 12572)", issuer:"Walltopia",
       fileUrl:"assets/certs/climbing-walls-standards-en12572.pdf"},
+    {date:"2025", title:"Tripoli High Power Rocketry — Level 1 & Level 2", issuer:"Tripoli Rocketry Association",
+      fileUrl:"assets/certs/tripoli_card.pdf"},
     {date:"2025", title:"Fundamentals of Remote Sensing", issuer:"NASA ARSET — Applied Remote Sensing Training Program",
       fileUrl:"assets/certs/nasa-arset.pdf"},
     {date:"2020", title:"Prescription Drug Regulation, Cost & Access", issuer:"HarvardX — Verified Certificate",
