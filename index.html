@@ -905,7 +905,8 @@ const CONTENT = {
       bullets:["Tolerance-controlled CAD assemblies with interlocking mechanisms","Fabricated a lightweight composite prototype","Improved stability via balanced geometry","User-tested under simulated kitesurfing motion"],
       tags:["CAD","Prototyping"] },
 
-    { id:"materials", category:"eng", icon:"material", media:[
+    { id:"materials", category:"eng", icon:"material", layout:"none", media:[
+        {type:"image", src:"assets/images/SEM%20%E2%80%94%20AlSi10Mg%20Microstructure.jpg", caption:"SEM microstructure — AlSi10Mg"},
         {type:"image", src:"assets/images/AlSi10Mg%20Lab.png", caption:"Tensile and hardness testing"}
       ],
       feature:{type:"image", src:"assets/images/AlSi10Mg%20Poster%20%282%29.pptx.png", caption:"Research poster"},
@@ -1107,7 +1108,7 @@ function cardVisual(p, iconSvg){
 function buildSlides(p){
   const imgs = p.media || [];
   const slides = [];
-  if(imgs.length > 1) slides.push({type:'layout', layout:p.layout || 'row-3', items:imgs});
+  if(imgs.length > 1 && p.layout !== 'none') slides.push({type:'layout', layout:p.layout || 'row-3', items:imgs});
   if(p.feature) slides.push(p.feature);
   imgs.forEach(m => slides.push(m));
   return slides;
